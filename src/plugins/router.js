@@ -3,6 +3,9 @@ import VueRouter from 'vue-router'
 
 import HelloWorld from '../components/HelloWorld.vue'
 import SignupComponent from '../components/SignupComponent.vue'
+import LoginComponent from '../components/LoginComponent.vue'
+
+
 Vue.use(VueRouter);
 const routes = [
     {
@@ -12,6 +15,10 @@ const routes = [
     {
         path: '/signup',
         component: SignupComponent
+    },
+    {
+        path: '/login',
+        component: LoginComponent,
     }
 ]
 

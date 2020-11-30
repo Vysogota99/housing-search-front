@@ -138,6 +138,7 @@ export default {
 
 <style>
 .container{
+    margin-top: 190px;
     padding: 0px 100px;
     color:black;
 }
@@ -151,6 +152,7 @@ span{
     font-size: 24px;
 }
 .default-input{
+    background-color: #fff;
     border-radius: 99px;
     width: 294px;
     height: 46px;
@@ -159,6 +161,7 @@ span{
     color: #232323;
 }
 .default-btn{
+    margin-right: 10px;
     border-radius: 99px;
     width: 180px;
     height: 50px;
@@ -192,7 +195,6 @@ span{
 }
 .form_radio_group-item {
 	display: inline-block;
-	float: left;    
 }
 .form_radio_group input[type=radio] {
 	display: none;

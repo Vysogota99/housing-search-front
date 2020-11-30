@@ -1,10 +1,12 @@
 <template>
   <v-app class="app">
     <header-component/>
-    <router-view>Router</router-view>
-    <v-footer>
+    <div class="content">
+      <router-view>Router</router-view>
+    </div>
+    <!-- <v-footer>
       <span>&copy; 2020 HousingSearch</span>
-    </v-footer>
+    </v-footer> -->
   </v-app>
 </template>
 
@@ -24,6 +26,8 @@ export default {
 </script>
 
 <style>
+.content{
+}
 app{
   display: flex;
   flex-direction: column;
