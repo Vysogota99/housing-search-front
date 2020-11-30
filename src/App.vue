@@ -1,18 +1,19 @@
 <template>
   <v-app class="app">
     <header-component/>
-    <signup-component/>
+    <router-view>Router</router-view>
+    <v-footer>
+      <span>&copy; 2020 HousingSearch</span>
+    </v-footer>
   </v-app>
 </template>
 
 <script>
-import SignupComponent from './components/SignupComponent.vue'
 import HeaderComponent from './components/HeaderComponent.vue'
 export default {
   name: 'App',
 
   components: {
-    SignupComponent,
     HeaderComponent,
   },
 

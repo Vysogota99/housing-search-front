@@ -86,11 +86,25 @@
     </div>
     <br>
     <div class="row">
+        <div class="col-4"><span>Пароль</span></div>
+        <div class="col-8">
+            <input type="password" class="default-input" placeholder="Введите пароль">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4"><span>Пароль еще раз</span></div>
+        <div class="col-8">
+            <input type="password" class="default-input" placeholder="Повторите пароль">
+        </div>
+    </div>
+    <br>
+    <div class="row">
         <div class="col-4"><span>Паспорт*</span></div>
         <div class="col-8">
             <button class="default-btn">Заполнить</button>
         </div>
     </div>
+    <br>
     <div class="row">
         <div class="col-4">
         </div>
