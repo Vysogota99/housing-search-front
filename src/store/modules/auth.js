@@ -1,17 +1,20 @@
 import axios from 'axios'
+import router from '../../plugins/router'
 
 export default {
     actions: {
         loginUser(context, requestData) {
             let url = context.getters.getURL;
             const headers = context.getters.getHeaders;
-            
+
             axios.post(url + "/login", requestData, 
             {
                 headers: headers,
             })
             .then(function(response) {
-                setTimeout(() => context.commit("updateLoginMessageVisible", false), 2000);
+                setTimeout(() => {context.commit("updateLoginMessageVisible", false);
+                router.push("/");
+            }, 2000);
                 
                 context.commit("updateUser", response.data.user);
                 context.commit("updateAuthStatus", true);
@@ -20,7 +23,10 @@ export default {
 
                 context.commit("updateLoginMessageType", "success");
                 context.commit("updateLoginMessageVisible", true);
-                context.commit("updateLoginMessage", "Добро пожаловать " + response.data.user.PassName);               
+                context.commit("updateLoginMessage", "Добро пожаловать " + response.data.user.PassName);   
+                
+                localStorage.setItem("access_token", response.data.access_token);
+                localStorage.setItem("refresh_token", response.data.refresh_token);
             })
             .catch(function(error) {
                 const status = error.response.status;
@@ -38,8 +44,37 @@ export default {
                 if(status == '401') {
                     context.commit("updateLoginMessage", "Неправильный логин или пароль");  
                 }
+
+                localStorage.removeItem('access_token')
+                localStorage.removeItem('refresh_token')
             })
         },
+        logoutUser(context) {
+            let url = context.getters.getURL;
+            let headers = context.getters.getHeaders;
+            let accessToken = context.getters.getAccessToken;
+
+            headers.Authorization = "Bearer " + accessToken;
+            axios.post(url + "/logout", {}, {
+                headers: headers,
+            },
+            {
+                withCredentials: true 
+            })
+            .then(function(response){
+                console.log(response);
+                localStorage.removeItem("access_token");
+                localStorage.removeItem("refresh_token");
+
+                context.commit("updateAccessToken", "");
+                context.commit("updateRefreshToken", "");
+                context.commit("updateAuthStatus", false);
+
+            })
+            .catch(function(error){
+                console.log(error.response);
+            })
+        }
     },
     mutations: {
         updateUser(state, user) {
@@ -69,9 +104,9 @@ export default {
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',  
         },
-        isAuthorized: false,
         accessToken: localStorage.getItem('access_token') || '',
         refreshToken: localStorage.getItem('refresh_token') || '',
+        isAuthorized: localStorage.getItem('access_token') ? true: false,
         user: {},
 
         LoginMessageVisible: false,

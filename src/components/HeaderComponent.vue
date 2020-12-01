@@ -32,9 +32,13 @@
                             v-for="(item, index) in itemsUser"
                             :key="index"
                         >
-                                <router-link v-bind:to="item.url">
+                                <router-link v-bind:to="item.url" v-if="item.url != '/logout'">
                                     <v-list-item-title>{{ item.title }}</v-list-item-title>
                                 </router-link>
+
+                                <a v-else @click="logoutUser">
+                                    {{item.title}}
+                                </a>
                         </v-list-item>
                     </v-list>
                     <v-list v-else>
@@ -54,7 +58,7 @@
 </template>
 <script>
 
-import {mapGetters} from "vuex"
+import {mapGetters, mapActions} from "vuex"
 
 export default {
     data: () => ({
@@ -69,7 +73,7 @@ export default {
         },
         { 
             title: 'Выход',
-            url: '/',
+            url: '/logout',
         },
       ],
       itemsGuest: [
@@ -87,6 +91,11 @@ export default {
         ...mapGetters([
             "authStatus",
         ]),
+    },
+    methods: {
+        ...mapActions([
+            "logoutUser",
+        ])
     }
 }
 </script>

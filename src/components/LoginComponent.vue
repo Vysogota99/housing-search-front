@@ -85,7 +85,7 @@ export default {
             this.loginUser({
                 telephoneNumber: this.telNumber.replace(/[-]|[(]|[)]/gi, ''),
                 password: this.password,          
-            });
+            })
         }
     }
 }
