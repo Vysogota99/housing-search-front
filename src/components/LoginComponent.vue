@@ -17,12 +17,12 @@
                     <input type="password" class="default-input inf-inp" placeholder="Введите пароль" v-model="password">
                 </div>
                 <v-alert
-                    :value="visible"
+                    :value="getLoginMessageVisible"
                     dense
                     outlined
-                    v-bind:type="type"
+                    v-bind:type="getLoginMessageType"
                 >
-                    {{message}}
+                    {{getLoginMessage}}
                 </v-alert>
                 <div class="btns">
                     <button class="default-btn" @click="login()">войти</button>
@@ -35,37 +35,44 @@
 </template>
 
 <script>
-import axios from 'axios'
+import {mapGetters, mapActions, mapMutations} from "vuex"
+
 export default {
     data() {
         return{
-            visible: false,
-            message: "Неправильный номер телефона или пароль",
             telNumber: "",
             password: "",
-            type: 'error',
             apiUrl: "http://127.0.0.1/api"
         }
     },
+    computed: mapGetters([
+        "getLoginMessageVisible",
+        "getLoginMessage",
+        "getLoginMessageType"
+        ]),
     methods: {
+        ...mapActions(["loginUser"]),
+        ...mapMutations([
+            "updateLoginMessageType",
+            "updateLoginMessageVisible",
+            "updateLoginMessage"
+        ]),
         validate: function(){
             const reTelephone = /\+7\(\d{3}\)\d{3}-\d{2}-\d{2}/;
             let valid = reTelephone.test(this.telNumber)
             if(!valid){
-                this.type = 'error';
-                this.visible = true;
-                this.message = 'Некорректно набран номер!';
+                this.updateLoginMessageType("error");
+                this.updateLoginMessageVisible(true);
+                this.updateLoginMessage("Некорректно набран номер!");
                 return false;
             }
 
             if(this.password.length < 5) {
-                this.type = 'error';
-                this.visible = true;
-                this.message = 'Пароль слишком короткий!';
+                this.updateLoginMessageType("error");
+                this.updateLoginMessageVisible(true);
+                this.updateLoginMessage("Пароль слишком короткий!");
                 return false;
             }
-
-            this.telNumber = this.telNumber.replace(/[-]|[(]|[)]/gi, '');
             return true;
         },
 
@@ -75,44 +82,10 @@ export default {
                 return;
             }
 
-            const self = this;
-            const headers ={
-                'Content-Type': 'application/x-www-form-urlencoded',
-            } 
-            axios.post(this.apiUrl + '/login', 
-            {
-                    telephoneNumber: this.telNumber,
-                    password: this.password,
-            },
-            {
-                headers: headers,
-            })
-            .then(function(response){
-                console.log(response);
-                setTimeout(() => {
-                        self.visible = false;
-                    }, 2000);
-                self.visible = true;
-                self.type = 'success'
-                self.message = 'Готово'
-            }).catch(function(error){
-                const status = error.response.status
-                self.type = 'error';
-                setTimeout(() => self.visible = false, 2000);
-
-                if(status == '422') {
-                    self.visible = true;
-                    self.message = 'Поля заполнены неправильно!';
-                }else 
-                if(status == '500') {
-                    self.visible = true;
-                    self.message = 'Внутрення ошибка сервера';
-                }else 
-                if(status == '401') {
-                    self.visible = true;
-                    self.message = 'Неправильный логин или пароль';   
-                }
-            })
+            this.loginUser({
+                telephoneNumber: this.telNumber.replace(/[-]|[(]|[)]/gi, ''),
+                password: this.password,          
+            });
         }
     }
 }

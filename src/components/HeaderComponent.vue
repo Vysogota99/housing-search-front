@@ -26,14 +26,25 @@
                             </v-icon>
                         </v-btn>
                     </template>
-                    <v-list>
+
+                    <v-list v-if="authStatus">
+                        <v-list-item
+                            v-for="(item, index) in itemsUser"
+                            :key="index"
+                        >
+                                <router-link v-bind:to="item.url">
+                                    <v-list-item-title>{{ item.title }}</v-list-item-title>
+                                </router-link>
+                        </v-list-item>
+                    </v-list>
+                    <v-list v-else>
                         <v-list-item
                             v-for="(item, index) in itemsGuest"
                             :key="index"
                         >
-                            <a v-bind:href="item.url">
-                                <v-list-item-title>{{ item.title }}</v-list-item-title>
-                            </a>
+                                <router-link v-bind:to="item.url">
+                                    <v-list-item-title>{{ item.title }}</v-list-item-title>
+                                </router-link>
                         </v-list-item>
                     </v-list>
                 </v-menu>
@@ -42,12 +53,24 @@
     </header>
 </template>
 <script>
+
+import {mapGetters} from "vuex"
+
 export default {
     data: () => ({
       itemsUser: [
-        { title: 'Профиль' },
-        { title: 'Объявления' },
-        { title: 'Выход' },
+        { 
+            title: 'Профиль',
+            url: '/account' 
+        },
+        { 
+            title: 'Объявления',
+            url: '/', 
+        },
+        { 
+            title: 'Выход',
+            url: '/',
+        },
       ],
       itemsGuest: [
           {
@@ -60,6 +83,11 @@ export default {
           }
       ]
     }),
+    computed: {
+        ...mapGetters([
+            "authStatus",
+        ]),
+    }
 }
 </script>
 <style>
