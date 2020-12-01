@@ -26,8 +26,6 @@ export default {
 </script>
 
 <style>
-.content{
-}
 app{
   display: flex;
   flex-direction: column;

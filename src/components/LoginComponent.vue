@@ -11,7 +11,7 @@
             </v-card-subtitle>
             <v-card-text>
                 <div class="login">
-                    <input type="tel" class="default-input inf-inp" placeholder="+" v-model="telNumber">
+                    <input type="tel" class="default-input inf-inp" placeholder="+7(800)555-35-35" v-model="telNumber">
                 </div>
                 <div class="password">
                     <input type="password" class="default-input inf-inp" placeholder="Введите пароль" v-model="password">
@@ -48,7 +48,33 @@ export default {
         }
     },
     methods: {
+        validate: function(){
+            const reTelephone = /\+7\(\d{3}\)\d{3}-\d{2}-\d{2}/;
+            let valid = reTelephone.test(this.telNumber)
+            if(!valid){
+                this.type = 'error';
+                this.visible = true;
+                this.message = 'Некорректно набран номер!';
+                return false;
+            }
+
+            if(this.password.length < 5) {
+                this.type = 'error';
+                this.visible = true;
+                this.message = 'Пароль слишком короткий!';
+                return false;
+            }
+
+            this.telNumber = this.telNumber.replace(/[-]|[(]|[)]/gi, '');
+            return true;
+        },
+
         login: function(){
+            if(!this.validate()){
+                console.log('not valid');
+                return;
+            }
+
             const self = this;
             const headers ={
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -70,7 +96,6 @@ export default {
                 self.type = 'success'
                 self.message = 'Готово'
             }).catch(function(error){
-                console.log(error.response);
                 const status = error.response.status
                 self.type = 'error';
                 setTimeout(() => self.visible = false, 2000);
