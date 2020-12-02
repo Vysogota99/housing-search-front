@@ -7,7 +7,7 @@
 
                     </div>
                     <div class="logo-text">
-                        <p>H<span>Search</span></p>
+                        <p id="p-logo">H<span>Search</span></p>
                     </div>
                 </router-link>
                 <div class="links">
@@ -149,6 +149,12 @@ export default {
     font-weight: bold;
     color:#512DE4;
 }
+#p-logo{
+    font-size: 40px;
+    letter-spacing: 0ch;
+    font-weight: bold;
+    color:#232323;  
+}
 header{
     background-color: rgb(253, 253, 253);
     z-index: 10;
@@ -168,6 +174,7 @@ header{
     justify-content: space-between;
 }
 .right-content{
+    padding-top: 5px;
     display: flex;
     flex-flow: row nowrap;
 }

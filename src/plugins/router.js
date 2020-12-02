@@ -6,6 +6,7 @@ import HelloWorld from '../components/HelloWorld.vue'
 import SignupComponent from '../components/SignupComponent.vue'
 import LoginComponent from '../components/LoginComponent.vue'
 import AccountComponent from '../components/AccountComponent.vue'
+import RoomsComponent from '../components/RoomsComponent.vue'
 
 
 Vue.use(VueRouter);
@@ -32,6 +33,11 @@ const routes = [
         meta: {
             requiresAuth: true,
         }
+    },
+    {
+        path: '/rooms',
+        name: 'rooms-cards',
+        component: RoomsComponent,
     }
 ]
 
