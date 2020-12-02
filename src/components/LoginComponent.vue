@@ -2,7 +2,7 @@
     <div class="login-container">
         <v-card
             class="surface"
-            max-width="500"
+            max-width="550"
         >
             <v-card-title>Авторизация</v-card-title>
             <br>
@@ -67,7 +67,7 @@ export default {
                 return false;
             }
 
-            if(this.password.length < 5) {
+            if(this.password.length < 2) {
                 this.updateLoginMessageType("error");
                 this.updateLoginMessageVisible(true);
                 this.updateLoginMessage("Пароль слишком короткий!");
@@ -119,5 +119,8 @@ export default {
 }
 .v-sheet.v-card {
     border-radius: 15px;
+}
+.surface{
+    padding: 15px 25px;
 }
 </style>

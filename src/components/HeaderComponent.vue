@@ -2,11 +2,27 @@
     <header>
         <div class="header-container">
             <div class="logo">
-                <a href="/">
-                    <!-- <h1>HousingSearch</h1> -->
-                </a>
+                <router-link to="/" class="logo-container">
+                    <div class="logo-img">
+
+                    </div>
+                    <div class="logo-text">
+                        <p>H<span>Search</span></p>
+                    </div>
+                </router-link>
+                <div class="links">
+                        <ul class="links-ul">
+                            <router-link to="/flats">
+                                <li>квартиры</li>
+                            </router-link>
+                            <router-link to="/rooms">
+                                <li>комнаты</li>
+                            </router-link>
+                        </ul>
+                </div>
             </div>
-            <div class="links"></div>
+            <div class="spacer">
+            </div>
             <div class="right-content">
                 <ul class="hr">
                     <li>ДОБАВИТЬ ОБЪЯВЛЕНИЕ</li>
@@ -100,6 +116,39 @@ export default {
 }
 </script>
 <style>
+.logo{
+    font-weight: bold;
+    letter-spacing: 0px;
+    color: #000000;
+    font-size: 40px;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: start;
+}
+.logo-container{
+    padding-top: 5px;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: start;  
+}
+.logo-img{
+    width: 50px;
+    height: 50px;
+    background-image: url("../assets/main-logo.png");
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Do not repeat the image */
+    background-size: cover; /* Resize the background image to cover the entire container */
+}
+.logo a:visited{
+    text-decoration: none;
+    color: #232323;  
+}
+.logo span{
+    font-size: 40px;
+    letter-spacing: 0ch;
+    font-weight: bold;
+    color:#512DE4;
+}
 header{
     background-color: rgb(253, 253, 253);
     z-index: 10;
@@ -143,5 +192,17 @@ ul.hr li {
     color: #232323;
     display: inline; /* Отображать как строчный элемент */
     margin-right: 30px; /* Отступ слева */
+}
+.links-ul li{
+    font-size: 20px;
+    color: #232323;
+    display: inline; /* Отображать как строчный элемент */
+    margin-right: 15px; /* Отступ слева */ 
+}
+.links-ul li:hover{
+    font-size: 20px;
+    color: #000;
+    display: inline; /* Отображать как строчный элемент */
+    margin-right: 15px; /* Отступ слева */ 
 }
 </style>

@@ -258,7 +258,8 @@
 </div>
 </template>
 <script>
-import axios from 'axios'
+import axios from 'axios';
+import {mapActions} from 'vuex'
 export default {
     data: () => ({
         dayItems: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'],
@@ -293,7 +294,9 @@ export default {
         alertType: "success",
         alerVisible: false,
 
-        apiUrl: "http://127.0.0.1/api"
+        apiUrl: "http://127.0.0.1/api",
+
+        self: this,
     }),
     created: function() {
         this.setYears();
@@ -460,6 +463,7 @@ export default {
         },
     },
     methods: {
+        ...mapActions(["loginUser"]),
         validate: function(){
             if(this.nameValid && this.lastnameValid && this.fNameValid && this.sexValid
                 && this.dayBirthValid && this.monthBirthValid && this.yearBirthValid
@@ -508,10 +512,15 @@ export default {
             {
                 headers: headers,
             })
+            
             .then(function(response){
                 console.log(response);
                 setTimeout(() => {
                         self.alerVisible = false;
+                        self.loginUser({
+                            telephoneNumber: self.telNumber.replace(/[-]|[(]|[)]/gi, ''),
+                            password: self.password,    
+                        });
                     }, 2500);
 
                 self.alerVisible = true;
