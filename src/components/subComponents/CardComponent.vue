@@ -5,17 +5,32 @@
 
             </div>
             <div class="card-descr-one">
-                <h2>Описание жилья</h2>
-                <h3>Коломенский проезд, 23к1 кв62</h3>
-                <p>Критерий 1</p>
-                <p>Критерий 2</p>
-                <p>Критерий 3</p>
-                <p>Критерий 4</p>
+                <h2 v-if="room.description">{{room.description}}</h2>
+                <h2 v-else>Сдается комната</h2>
+                <h3>{{room.address}}</h3>
+                <p>
+                    <v-icon
+                        color="red"
+                    >
+                        mdi-subway-variant
+                    </v-icon>
+                    {{room.metro}}
+                </p>
+                <p>
+                    {{room.ttmetro_foot}} минут пешком 
+                    &bull;
+                    {{room.ttmetro_transport}} минут на транспорте 
+                    
+                </p>
+                <p>
+                   Площадь квартиры {{room.flat_area}} м<sup>2</sup>, площадь комнаты {{room.area}} м<sup>2</sup></p>
+                <p>Этаж {{room.floor}}/{{room.floor_total}}</p>
+
             </div>
         </div>
         <div class="card-descr-two">
             <p>Занято</p>
-            <p><span class="n-living-places">3/4</span></p>
+            <p><span class="n-living-places">{{room.curr_number_of_residents}}/{{room.max_residents}}</span></p>
             <div class="card-descr-two-btns">
                 <div class="btn-in-card">
                     <v-btn
@@ -59,7 +74,11 @@
 
 <script>
 export default {
-    
+    props: {
+        room: {
+                type: Object,
+                }
+    }
 }
 </script>
 
@@ -94,10 +113,12 @@ export default {
     min-width: 200px;
 }
 .card-descr-one h2{
+    max-width: 300px;
     font-size: 30px;
     font-weight: 700;
 }
 .card-descr-one h3{
+    max-width: 300px;
     font-size: 18px;
     font-weight: 700;
     color: #535353;

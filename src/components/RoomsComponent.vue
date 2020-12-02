@@ -1,13 +1,92 @@
 <template>
 <div class="rooms-container">
     <div class="rooms-content">
-        <div class="row">
-            <button @click="mapVisible = !mapVisible">Скрыть карту</button>
+        <div class="row" id="filters-top-bar">
+            <div class="col-1"></div>
+            <div class="col-10">
+            <div class="filters-bar">
+                <input type="text" class="default-input filter-top-bar-inp" placeholder="введите адрес" v-model="address">      
+                <v-slider
+                    label="Цена"
+                    v-model="minPrice"
+                    class="align-center"
+                    :max="max"
+                    :min="min"
+                >
+                    <template v-slot:append>
+                        <v-text-field
+                            v-model="minPrice"
+                            class="mt-0 pt-0"
+                            hide-details
+                            single-line
+                            type="number"
+                            style="width: 60px"
+                        ></v-text-field>
+                    </template>
+                </v-slider>
+            </div>      
+            <div class="row" id="filters-bar">    
+                <v-select
+                    class="default-input"
+                    :items="sortBy"
+                    label="сортировать по"
+                    v-model="sortValue"
+                ></v-select>
+                <v-btn
+                    class="mx-2"
+                    fab
+                    dark
+                    color="#512DE4"
+                >
+                <v-icon dark>
+                    mdi-filter-outline
+                </v-icon>
+                </v-btn>
+                <button class="default-btn">Найти</button> 
+                <router-link to="/rooms/map">
+                    <button class="default-btn">Карта</button> 
+                </router-link>
+            </div> 
+            </div>
+            <div class="col-1">
+                <div class="map-control">
+                    <v-btn
+                        class="mx-2"
+                        fab
+                        large
+                        dark
+                        color="#fff"
+                        @click="mapVisible=!mapVisible"
+                    >
+                        <v-icon dark color="#512DE4" v-if="mapVisible">
+                            mdi-arrow-right-bold-circle-outline
+                        </v-icon>
+                        <v-icon dark color="#512DE4" v-else>
+                            mdi-arrow-left-bold-circle-outline
+                        </v-icon>
+                        
+                    </v-btn>
+                </div>
+            </div>
         </div>
         <div class="row">
             <div class="col-1"></div>
             <div class="col-10">
-                <CardComponent v-for="room in rooms" :key="room.id"/>
+                <CardComponent v-for="room in rooms" :key="room.id" :room="room"/>
+            </div>
+            <div class="col-1"></div>
+        </div>
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col-10">
+                <div class="pagination">
+                    <v-pagination
+                    v-model="currPage"
+                    color="#512DE4"
+                    :length="nPages"
+                    circle
+                    ></v-pagination>
+                </div>
             </div>
             <div class="col-1"></div>
         </div>
@@ -19,7 +98,7 @@
     >
         <div class="rooms-map" id="rooms-map" v-show="mapVisible">
             <div class="map-block">
-
+                <MapComponent :zoom="mapZoom" :coords="mapCenter" :points="rooms"/>
             </div>
         </div>
     </transition>
@@ -29,12 +108,14 @@
 <script>
 
 import CardComponent from './subComponents/CardComponent.vue';
+import MapComponent from './subComponents/MapComponent.vue';
 import config from '../config.js';
 import axios from 'axios'
 
 export default {
     components: {
         CardComponent,
+        MapComponent,
     },
     data(){
         return{
@@ -42,6 +123,20 @@ export default {
             rooms: [],
             nPages: 1,
             currPage: 1,
+            sortBy: [
+                'время создания объявления',
+                'цена'
+            ],
+            sortValue: '',
+            address: '',
+            minPrice: '',
+            min: 0,
+            max: 100000,
+
+            mapCenter: [55.7, 38.45],
+            mapZoom: 10,
+
+            limit: 5,
         }
     },
     methods: {
@@ -56,19 +151,24 @@ export default {
                 }
             )
             .then(function(response){
-                console.log(response.data.result);
                 self.rooms = response.data.result.data;
                 self.nPages = response.data.result.num_pages;
                 self.currPage = response.data.result.curr_page;
             })
             .catch(function(error){
+                self.rooms = [];
                 console.log(error.response);
             })
         }
     },
     created: function(){
-        this.getRooms(10, 1);
-    }   
+        this.getRooms(this.limit, 1);
+    },
+    watch: {
+      currPage: function(value) {
+          this.getRooms(this.limit, value);
+      }  
+    }
 }
 </script>
 
@@ -96,7 +196,6 @@ export default {
     position: fixed;
     width: 100%;
     height: 100vh;
-    background-color: green;
 
     background-blend-mode: saturation;
     background-attachment: fixed;
@@ -115,5 +214,26 @@ export default {
 /* .slide-fade-leave-active до версии 2.1.8 */ {
   transform: translateX(10px);
   opacity: 0;
+}
+.filters-bar{
+    margin-top: 75px;
+    display: flex;
+    flex-flow: row nowrap;
+}
+.filter-top-bar-inp{
+    min-width: 300px;
+    margin-right: 20px;
+}
+.pagination{
+    margin: 15px 40% 70px 40%;
+    width: 900px;
+}
+.map-control{
+    margin-top: 110px;
+    z-index: 10;
+    position: fixed;
+    top: 10px;
+    height: 100px;
+    width: 100px;
 }
 </style>
