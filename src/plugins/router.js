@@ -8,6 +8,7 @@ import LoginComponent from '../components/LoginComponent.vue'
 import AccountComponent from '../components/AccountComponent.vue'
 import RoomsComponent from '../components/RoomsComponent.vue'
 import RoomsMapComponent from '../components/RoomsMapComponent.vue'
+import SearchHomeComponent from '../components/SearchHomeComponent.vue'
 
 
 Vue.use(VueRouter);
@@ -44,6 +45,11 @@ const routes = [
         path: '/rooms/map',
         name: 'rooms-map',
         component: RoomsMapComponent,
+    },
+    {
+        path: '/lots',
+        name: 'lots-cards',
+        component: SearchHomeComponent,
     }
 ]
 
