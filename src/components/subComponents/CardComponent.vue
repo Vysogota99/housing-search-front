@@ -65,6 +65,7 @@ export default {
 
 <style>
 .card{
+    margin: 15px 10px;
     min-width: 800px;
     min-height: 380px;
     border: 2px solid #512DE4;
