@@ -143,7 +143,7 @@
                     <span>Площадь</span>
                 </div>
                 <div class="col-9 right-col">
-                    <input type="text" class="default-input w78" placeholder="15" v-model="square">
+                    <input type="text" class="default-input w78" placeholder="15" v-model="area">
                     <div class="text">
                         <span> м <sup>2</sup></span>
                     </div>
@@ -181,7 +181,7 @@
                 </div>
                 <div class="col-5 right-col no-pading-hor">
                     <div class="checkbox">
-                        <input type="checkbox" id="tv">
+                        <input type="checkbox" id="tv" v-model="tv">
                         <label for="tv"><span>телевизор</span></label>
                     </div>
                 </div>
@@ -356,7 +356,7 @@
                     <span>Этажей в дома</span>
                 </div>
                 <div class="col-9 right-col  no-pading-bot">
-                    <input type="text" class="default-input w208" placeholder="5" v-model="floor_total">
+                    <input type="text" class="default-input w208" placeholder="5" v-model="total_floor">
                 </div>
             </div>
 
@@ -394,33 +394,6 @@ import {mapMutations, mapGetters} from 'vuex'
 export default {
     data: function(){
         return{
-            ttmetro_type: '',
-            free_places: 0,
-            max_num_residents: 0,
-            one_bed_place: 0,
-            two_bed_place: 0,
-            square: '',
-            wifi: false,
-            windows: false,
-            tv: false,
-            balcony: false,
-            cond: false,
-            bathroom: false,
-            refr: false,
-            restroom: false,
-            vac_cleaner: false,
-            kitchen: false,
-            micr_ovem: false,
-            washer: false,
-            dryer: false,
-            dish_wash: false,
-            pass_elev: false,
-            service_elev: false,
-            repair: '', 
-            floor: '',
-            floor_total: '',
-            smoking: false,
-            animals: false,
         }
     },
     props: {
@@ -442,6 +415,32 @@ export default {
                 'updateRoomTtmetroTime',
                 'updateInternet',
                 'updateStove',
+                'updateArea',
+                'updateWindows',
+                'updateWifi',
+                'updateTv',
+                'updateBalcony',
+                'updateCond',
+                'updateBathroom',
+                'updateRefr',
+                'updateRestroom',
+                'updateVaccleaner',
+                'updateKitchen',
+                'updateMicrovem',
+                'updateWasher',
+                'updateDryer',
+                'updateDishwash',
+                'updatePasselev',
+                'updateServiceelev',
+                'updateSmoking',
+                'updateAnimals',
+                'updateFloor',
+                'updateTotalfloor',
+                'updateRepair',
+                'updateFreeplaces',
+                'updateMaxnumresidents',
+                'updateOnebedplace',
+                'updateTwobedplace',
             ])
     },
     computed: {
@@ -450,25 +449,77 @@ export default {
             'roomTtmetroTime',
             'getInternet',
             'getStove',
+            'getArea',
+            'getWindows',
+            'getWifi',
+            'getTv',
+            'getBalcony',
+            'getCond',
+            'getBathroom',
+            'getRefr',
+            'getRestroom',
+            'getVaccleaner',
+            'getKitchen',
+            'getMicrovem',
+            'getWasher',
+            'getDryer',
+            'getDishwash',
+            'getPasselev',
+            'getServiceselev',
+            'getSmoking',
+            'getAnimals',
+            'getFloor',
+            'getTotalfloor',
+            'getRepair',
+            'getFreeplaces',
+            'getMaxnumresidents',
+            'getOnebedplace',
+            'getTwobedplace',
         ]),
+
         ttmetro_time: {
-            get(){
+            get() {
                 return this.roomTtmetroTime;
             },
-            set(value){
-                if(value <= 0 || value == '') {
-                    this.updateRoomTtmetroTime('');
-                    this.deleteFromFilterRooms(this.ttmetro_type);
-                }else{
+            set(value) {
+                this.updateRoomTtmetroTime(value);
+                if(value > 0 && value != '') {
                     const result = "<" + value;
-                    this.updateRoomTtmetroTime(value);
                     this.setToFilterRooms({
-                                            key: this.ttmetro_type, 
-                                            value: result,
-                    }); 
+                        key: '',
+                        value: result,
+                    })
+                }else
+                {
+                    this.updateRoomTtmetroTime('');
+                    this.deleteFromFilterRooms('ttmetro_type_time');
                 }
             }
         },
+
+        ttmetro_type: {
+            get() {
+                return this.roomTtmetroType;
+            },
+            set(value) {
+                const time = this.roomTtmetroTime;
+                this.updateRoomTtmetroType(value);
+                if(value != '' && time > 0 && time != '') {
+                    const result = time;
+                    this.setToFilterRooms({
+                        key: this.roomTtmetroType,
+                        value: result,
+                    })
+                }else{
+                    
+                    this.deleteFromFilterRooms('ttmetro_type');
+                }
+            }
+        },
+
+
+
+
 
         internet: {
             get() {
@@ -501,10 +552,488 @@ export default {
                         value: result,
                     })
                 }else{
+                    
                     this.deleteFromFilterRooms('stove');
                 }
             }
-        }
+        },
+        
+        area: {
+            get() {
+                return this.getArea;
+            },
+            set(value) {
+                this.updateArea(value);
+                if(value > 0 && value != '') {
+                    const result = "<" + value;
+                    this.setToFilterRooms({
+                        key: 'area',
+                        value: result,
+                    })
+                }else
+                {
+                    this.updateArea('');
+                    this.deleteFromFilterRooms('area');
+                }
+            }
+        },
+
+        windows: {
+            get() {
+                return this.getWindows;
+            },
+            set(value) {
+                this.updateWindows(value);
+                if(value == true) {
+                    const result = "=" + value;
+                    this.setToFilterRooms({
+                        key: 'windows',
+                        value: result,
+                    })
+                }else{
+                    this.deleteFromFilterRooms('windows');
+                }
+            },
+        },
+
+        wifi: {
+            get() {
+                return this.getWifi;
+            },
+            set(value) {
+                this.updateWifi(value);
+                if(value == true) {
+                    const result = "=" + value;
+                    this.setToFilterRooms({
+                        key: 'wifi',
+                        value: result,
+                    })
+                }else{
+                    this.deleteFromFilterRooms('wifi');
+                }
+            },
+        },
+
+        tv: {
+            get() {
+                return this.getTv;
+            },
+            set(value) {
+                this.updateTv(value);
+                if(value == true) {
+                    const result = "=" + value;
+                    this.setToFilterRooms({
+                        key: 'tv',
+                        value: result,
+                    })
+                }else{
+                    this.deleteFromFilterRooms('tv');
+                }
+            },
+        },
+
+        balcony: {
+            get() {
+                return this.getBalcony;
+            },
+            set(value) {
+                this.updateBalcony(value);
+                if(value == true) {
+                    const result = "=" + value;
+                    this.setToFilterRooms({
+                        key: 'balcony',
+                        value: result,
+                    })
+                }else{
+                    this.deleteFromFilterRooms('balcony');
+                }
+            },
+        },
+        
+        cond: {
+            get() {
+                return this.getCond;
+            },
+            set(value) {
+                this.updateCond(value);
+                if(value == true) {
+                    const result = "=" + value;
+                    this.setToFilterRooms({
+                        key: 'cond',
+                        value: result,
+                    })
+                }else{
+                    this.deleteFromFilterRooms('cond');
+                }
+            },
+        },
+
+        bathroom: {
+            get() {
+                return this.getBathroom;
+            },
+            set(value) {
+                this.updateBathroom(value);
+                if(value == true) {
+                    const result = "=" + value;
+                    this.setToFilterRooms({
+                        key: 'bathroom',
+                        value: result,
+                    })
+                }else{
+                    this.deleteFromFilterRooms('bathroom');
+                }
+            },
+        },
+
+        refr: {
+            get() {
+                return this.getRefr;
+            },
+            set(value) {
+                this.updateRefr(value);
+                if(value == true) {
+                    const result = "=" + value;
+                    this.setToFilterRooms({
+                        key: 'refrigerator',
+                        value: result,
+                    })
+                }else{
+                    this.deleteFromFilterRooms('refrigerator');
+                }
+            },
+        },
+
+        restroom: {
+            get() {
+                return this.getRestroom;
+            },
+            set(value) {
+                this.updateRestroom(value);
+                if(value == true) {
+                    const result = "=" + value;
+                    this.setToFilterRooms({
+                        key: 'restroom',
+                        value: result,
+                    })
+                }else{
+                    this.deleteFromFilterRooms('restroom');
+                }
+            },
+        },
+
+        vac_cleaner: {
+            get() {
+                return this.getVaccleaner;
+            },
+            set(value) {
+                this.updateVaccleaner(value);
+                if(value == true) {
+                    const result = "=" + value;
+                    this.setToFilterRooms({
+                        key: 'vacuum_cleaner',
+                        value: result,
+                    })
+                }else{
+                    this.deleteFromFilterRooms('vacuum_cleaner');
+                }
+            },
+        },
+        kitchen: {
+            get() {
+                return this.getKitchen;
+            },
+            set(value) {
+                this.updateKitchen(value);
+                if(value == true) {
+                    const result = "=" + value;
+                    this.setToFilterRooms({
+                        key: 'kitchen',
+                        value: result,
+                    })
+                }else{
+                    this.deleteFromFilterRooms('kitchen');
+                }
+            },
+        },
+
+        micr_ovem: {
+            get() {
+                return this.getMicrovem;
+            },
+            set(value) {
+                this.updateMicrovem(value);
+                if(value == true) {
+                    const result = "=" + value;
+                    this.setToFilterRooms({
+                        key: 'microwave_oven',
+                        value: result,
+                    })
+                }else{
+                    this.deleteFromFilterRooms('microwave_oven');
+                }
+            },
+        },
+
+        washer: {
+            get() {
+                return this.getWasher;
+            },
+            set(value) {
+                this.updateWasher(value);
+                if(value == true) {
+                    const result = "=" + value;
+                    this.setToFilterRooms({
+                        key: 'washer',
+                        value: result,
+                    })
+                }else{
+                    this.deleteFromFilterRooms('washer');
+                }
+            },
+        },
+
+        dryer: {
+            get() {
+                return this.getDryer;
+            },
+            set(value) {
+                this.updateDryer(value);
+                if(value == true) {
+                    const result = "=" + value;
+                    this.setToFilterRooms({
+                        key: 'dryer',
+                        value: result,
+                    })
+                }else{
+                    this.deleteFromFilterRooms('dryer');
+                }
+            },
+        },
+
+        dish_wash: {
+            get() {
+                return this.getDishwash;
+            },
+            set(value) {
+                this.updateDishwash(value);
+                if(value == true) {
+                    const result = "=" + value;
+                    this.setToFilterRooms({
+                        key: 'dishwasher',
+                        value: result,
+                    })
+                }else{
+                    this.deleteFromFilterRooms('dishwasher');
+                }
+            },
+        },
+
+        pass_elev: {
+            get() {
+                return this.getPasselev;
+            },
+            set(value) {
+                this.updatePasselev(value);
+                if(value == true) {
+                    const result = "=" + value;
+                    this.setToFilterRooms({
+                        key: 'pass_elevator',
+                        value: result,
+                    })
+                }else{
+                    this.deleteFromFilterRooms('pass_elevator');
+                }
+            },
+        },
+
+        service_elev: {
+            get() {
+                return this.getServiceelev;
+            },
+            set(value) {
+                this.updateServiceelev(value);
+                if(value == true) {
+                    const result = "=" + value;
+                    this.setToFilterRooms({
+                        key: 'service_elevator',
+                        value: result,
+                    })
+                }else{
+                    this.deleteFromFilterRooms('service_elevator');
+                }
+            },
+        },
+        
+        smoking: {
+            get() {
+                return this.getSmoking;
+            },
+            set(value) {
+                this.updateSmoking(value);
+                if(value == true) {
+                    const result = "=" + value;
+                    this.setToFilterRooms({
+                        key: 'smoking',
+                        value: result,
+                    })
+                }else{
+                    this.deleteFromFilterRooms('smoking');
+                }
+            },
+        },
+        animals: {
+            get() {
+                return this.getAnimals;
+            },
+            set(value) {
+                this.updateAnimals(value);
+                if(value == true) {
+                    const result = "=" + value;
+                    this.setToFilterRooms({
+                        key: 'animals',
+                        value: result,
+                    })
+                }else{
+                    this.deleteFromFilterRooms('animals');
+                }
+            },
+        },
+
+        floor: {
+            get() {
+                return this.getFloor;
+            },
+            set(value) {
+                this.updateFloor(value);
+                if(value > 0 && value != '') {
+                    const result = "<" + value;
+                    this.setToFilterRooms({
+                        key: 'floor',
+                        value: result,
+                    })
+                }else
+                {
+                    this.updateFloor('');
+                    this.deleteFromFilterRooms('floor');
+                }
+            }
+        },
+
+        total_floor: {
+            get() {
+                return this.getTotalfloor;
+            },
+            set(value) {
+                this.updateTotalfloor(value);
+                if(value > 0 && value != '') {
+                    const result = "<" + value;
+                    this.setToFilterRooms({
+                        key: 'floor_total ',
+                        value: result,
+                    })
+                }else
+                {
+                    this.updateTotalfloor('');
+                    this.deleteFromFilterRooms('floor_total ');
+                }
+            }
+        },
+
+        repair: {
+            get() {
+                return this.getRepair;
+            },
+            set(value) {
+                this.updateRepair(value);
+                if(value != '') {
+                    const result = "=" + value;
+                    this.setToFilterRooms({
+                        key: 'repair',
+                        value: result,
+                    })
+                }else{
+                    
+                    this.deleteFromFilterRooms('repair');
+                }
+            }
+        },
+
+        free_places: {
+            get() {
+                return this.getFreeplaces;
+            },
+            set(value) {
+                this.updateFreeplaces(value);
+                if(value >= 1) {
+                    const result = "=" + value;
+                    this.setToFilterRooms({
+                        key: 'free_places',
+                        value: result,
+                    })
+                }else{
+                    this.updateFreeplaces(0);
+                    this.deleteFromFilterRooms('free_places');
+                }
+            }
+        },
+
+        max_num_residents: {
+            get() {
+                return this.getMaxnumresidents;
+            },
+            set(value) {
+                this.updateMaxnumresidents(value);
+                if(value >= 1) {
+                    const result = "=" + value;
+                    this.setToFilterRooms({
+                        key: 'max_num_residents',
+                        value: result,
+                    })
+                }else{
+                    this.updateMaxnumresidents(0);
+                    this.deleteFromFilterRooms('max_num_residents');
+                }
+            }
+        },
+
+        one_bed_place: {
+            get() {
+                return this.getOnebedplace;
+            },
+            set(value) {
+                this.updateOnebedplace(value);
+                if(value >= 1) {
+                    const result = "=" + value;
+                    this.setToFilterRooms({
+                        key: 'one_bed_place',
+                        value: result,
+                    })
+                }else{
+                    this.updateOnebedplace(0);
+                    this.deleteFromFilterRooms('one_bed_place');
+                }
+            }
+        },
+
+        two_bed_place: {
+            get() {
+                return this.getTwobedplace;
+            },
+            set(value) {
+                this.updateTwobedplace(value);
+                if(value >= 1) {
+                    const result = "=" + value;
+                    this.setToFilterRooms({
+                        key: 'two_bed_place',
+                        value: result,
+                    })
+                }else{
+                    this.updateTwobedplace(0);
+                    this.deleteFromFilterRooms('two_bed_place');
+                }
+            }
+        },
     },
 }
 </script>
