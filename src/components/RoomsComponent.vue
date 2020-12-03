@@ -148,6 +148,7 @@ export default {
     methods: {
         getRooms: function(limit, offset) {
             let self = this;
+            console.log(config.apiURL);
             axios.get(config.apiURL + '/rooms',
                 {
                     params: {
