@@ -156,7 +156,7 @@ export default {
     font-style: normal;
     font-weight: 900;
     font-size: 18px;
-    margin-top: 8px;
+    margin-top: 22px;
     margin-right: 8px;
   }
 
@@ -173,7 +173,7 @@ export default {
     border-color:rgba(136, 136, 136, 1);
     font-family: sans-serif;
     font-style: normal;
-    margin-top: 8px;
+    margin-top: 22px;
     margin-right: 8px;
   }
   .bi {
