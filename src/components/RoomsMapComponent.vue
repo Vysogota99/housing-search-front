@@ -65,7 +65,7 @@ export default {
         }
     },
     created: function(){
-        this.getRooms(this.limit, 1);
+      //  this.getRooms(this.limit, 1);
     },
 }
 </script>

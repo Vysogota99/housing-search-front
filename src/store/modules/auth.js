@@ -100,7 +100,7 @@ export default {
         }
     },
     state: {
-        backendURL: "http://127.0.0.1/api",
+        backendURL: "http://185.251.91.134/api/",
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',  
         },
