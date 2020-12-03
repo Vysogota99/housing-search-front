@@ -259,6 +259,7 @@
 </template>
 <script>
 import axios from 'axios';
+import config from '../config.js'
 import {mapActions} from 'vuex'
 export default {
     data: () => ({
@@ -507,12 +508,11 @@ export default {
             const headers ={
                 'Content-Type': 'application/x-www-form-urlencoded',
             } 
-            axios.post(this.apiUrl + '/signup', 
+            axios.post(config.apiUrl + '/signup', 
             User,
             {
                 headers: headers,
             })
-            
             .then(function(response){
                 console.log(response);
                 setTimeout(() => {

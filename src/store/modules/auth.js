@@ -1,6 +1,6 @@
 import axios from 'axios'
 import router from '../../plugins/router'
-
+import config from '../../config.js'
 export default {
     actions: {
         loginUser(context, requestData) {
@@ -100,7 +100,7 @@ export default {
         }
     },
     state: {
-        backendURL: "http://185.251.91.134/api/",
+        backendURL: config.apiURL,
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',  
         },

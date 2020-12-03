@@ -42,7 +42,6 @@ export default {
         return{
             telNumber: "",
             password: "",
-            apiUrl: "http://127.0.0.1/api"
         }
     },
     computed: mapGetters([
