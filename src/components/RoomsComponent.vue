@@ -1,13 +1,14 @@
 <template>
 <div class="rooms-container">
     <div class="rooms-content">
+        <FilterComponent :isActive="closeOverlayFn" :overlay="overlay"/>
         <div class="row" id="filters-top-bar">
             <div class="col-1"></div>
             <div class="col-10">
             <div class="filters-bar">
                 <input type="text" class="default-input filter-top-bar-inp" placeholder="введите адрес" v-model="address">      
                 <v-slider
-                    label="Цена"
+                    label="Цена >"
                     v-model="minPrice"
                     class="align-center"
                     :max="max"
@@ -37,6 +38,7 @@
                     fab
                     dark
                     color="#512DE4"
+                    @click="overlay=true"
                 >
                 <v-icon dark>
                     mdi-filter-outline
@@ -109,6 +111,7 @@
 
 import CardComponent from './subComponents/CardComponent.vue';
 import MapComponent from './subComponents/MapComponent.vue';
+import FilterComponent from './subComponents/FiltersComponents'
 import config from '../config.js';
 import axios from 'axios'
 
@@ -116,10 +119,13 @@ export default {
     components: {
         CardComponent,
         MapComponent,
+        FilterComponent,
     },
     data(){
         return{
-            mapVisible: true,   
+            overlay: false,
+            mapVisible: true,  
+
             rooms: [],
             nPages: 1,
             currPage: 1,
@@ -159,6 +165,9 @@ export default {
                 self.rooms = [];
                 console.log(error.response);
             })
+        },
+        closeOverlayFn: function() {
+            this.overlay = false;
         }
     },
     created: function(){
@@ -230,7 +239,7 @@ export default {
 }
 .map-control{
     margin-top: 110px;
-    z-index: 10;
+    z-index: 2;
     position: fixed;
     top: 10px;
     height: 100px;

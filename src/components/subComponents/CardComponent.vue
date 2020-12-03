@@ -2,7 +2,13 @@
     <div class="card">
         <div class="card-left-container">
             <div class="card-image">
-
+                <!-- <img src="http://127.0.0.1/api/images/lot1_room1_1.jpeg" class="imageInCard" alt="фото комнаты"> -->
+            <v-img
+                src="http://127.0.0.1/api/images/lot2_room1_1.jpeg"
+                height="350"
+                width="385"
+                class="grey darken-4"
+            ></v-img>
             </div>
             <div class="card-descr-one">
                 <h2 v-if="room.description">{{room.description}}</h2>
@@ -76,8 +82,8 @@
 export default {
     props: {
         room: {
-                type: Object,
-                }
+            type: Object,
+        }
     }
 }
 </script>
@@ -103,10 +109,11 @@ export default {
     flex-grow: 2;
 }
 .card-image{
-    background-color: #232323;
+    position: relative;
     min-width:385px;
     min-height: 350px;
     border-radius: 20px;
+    overflow: hidden;
 }
 .card-descr-one{
     margin: 0px 15px;

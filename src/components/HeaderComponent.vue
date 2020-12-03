@@ -12,7 +12,7 @@
                 </router-link>
                 <div class="links">
                         <ul class="links-ul">
-                            <router-link to="/flats">
+                            <router-link to="/lots">
                                 <li>квартиры</li>
                             </router-link>
                             <router-link to="/rooms">
