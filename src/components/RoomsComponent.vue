@@ -1,11 +1,11 @@
 <template>
 <div class="rooms-container">
     <div class="rooms-content">
-        <FilterComponent :isActive="closeOverlayFn" :overlay="overlay"/>
+        <FilterComponent :isActive="closeOverlayFn" :overlay="overlay" :whatToDo="closeOverlayFn"/>
         <div class="row" id="filters-top-bar">
             <div class="col-1"></div>
             <div class="col-10">
-            <div class="filters-bar">
+            <div class="filters-bar mt75">
                 <input type="text" class="default-input filter-top-bar-inp" placeholder="введите адрес" v-model="address">      
                 <v-slider
                     label="Цена >"
@@ -26,13 +26,10 @@
                     </template>
                 </v-slider>
             </div>      
-            <div class="row" id="filters-bar">    
-                <v-select
-                    class="default-input"
-                    :items="sortBy"
-                    label="сортировать по"
-                    v-model="sortValue"
-                ></v-select>
+            <div class="filters-bar">    
+                <select class="form-control default-input inp-select" id="exampleFormControlSelect1" v-model="selectedSort">
+                    <option v-for="item in sortBy" :key="item.id" v-bind:value="item.data">{{item.name}}</option>
+                </select>
                 <v-btn
                     class="mx-2"
                     fab
@@ -44,9 +41,9 @@
                     mdi-filter-outline
                 </v-icon>
                 </v-btn>
-                <button class="default-btn">Найти</button> 
+                <button class="default-btn" @click="getRooms(limit,1)">Найти</button> 
                 <router-link to="/rooms/map">
-                    <button class="default-btn">Карта</button> 
+                    <button class="default-btn last-btn">Карта</button> 
                 </router-link>
             </div> 
             </div>
@@ -114,6 +111,7 @@ import MapComponent from './subComponents/MapComponent.vue';
 import FilterComponent from './subComponents/FiltersComponents'
 import config from '../config.js';
 import axios from 'axios'
+import {mapGetters, mapMutations} from 'vuex'
 
 export default {
     components: {
@@ -130,12 +128,39 @@ export default {
             nPages: 1,
             currPage: 1,
             sortBy: [
-                'время создания объявления',
-                'цена'
+                {
+                    id: 1,
+                    name:'время создания объявления - сначала новые',
+                    data: {
+                        target: 'desc',
+                        teg: 'created_at',
+                    }
+                },
+                {
+                    id: 2,
+                    name:'время создания объявления - сначала старые',
+                    data: {
+                        target: 'asc',
+                        teg: 'created_at',
+                    }
+                },
+                {
+                    id: 3,
+                    name:'цена - сначала дешевле',
+                    data: {
+                        target: 'asc',
+                        teg: 'price',
+                    }
+                },
+                {
+                    id: 4,
+                    name:'цена - сначала дороже',
+                    data: {
+                        target: 'desc',
+                        teg: 'price',
+                    }
+                },
             ],
-            sortValue: '',
-            address: '',
-            minPrice: '',
             min: 0,
             max: 100000,
 
@@ -145,16 +170,87 @@ export default {
             limit: 5,
         }
     },
+    computed: {
+        ...mapGetters([
+            'getMinPrice',
+            'getOrderBy',
+            'getAddress',
+            'filterRooms',
+        ]),
+        selectedSort: {
+            get() {
+                return this.getOrderBy;
+            },
+            set(value) {
+                this.updateOrderBy(value)
+                const result = value.teg + ' ' + value.target;
+                this.setToFilterRooms({
+                    key: 'sort',
+                    value: result,   
+                });
+
+            },
+        },
+        address: {
+            get() {
+                return this.getAddress;
+            },
+            set(value) {
+                this.updateAddress(value)
+                if(value != '') {
+                    const result = '=' + value;
+                    this.setToFilterRooms({
+                        key: 'address',
+                        value: result,
+                    });
+                }else{
+                    this.deleteFromFilterRooms('address');
+                }
+            },
+        },
+        minPrice: {
+            get() {
+                return this.getMinPrice;
+            },
+            set(value) {
+                this.updateMinPrice(value)
+                if(value != '' && value >= 0) {
+                    const result = '>=' + value;
+                    this.setToFilterRooms({
+                        key: 'price min',
+                        value: result,
+                    });
+                }else{
+                    this.deleteFromFilterRooms('price min');
+                }
+            },
+        }
+
+    },
     methods: {
+        ...mapMutations([
+            'setToFilterRooms',
+            'deleteFromFilterRooms',
+            'updateMinPrice',
+            'updateOrderBy',
+            'updateAddress',
+        ]),
         getRooms: function(limit, offset) {
-            let self = this;
-            console.log(config.apiURL);
+            let self = this;    
+            let filters = this.filterRooms;
+            let requestParams = {
+                limit: limit,
+                offset: offset,
+            };
+
+            for (let [key, value] of filters) {
+                requestParams[key] = value;
+            }
+
+
             axios.get(config.apiURL + '/rooms',
                 {
-                    params: {
-                        limit: limit,
-                        offset: offset,
-                    }
+                    params: requestParams,
                 }
             )
             .then(function(response){
@@ -226,9 +322,18 @@ export default {
   opacity: 0;
 }
 .filters-bar{
-    margin-top: 75px;
+    margin-top: 0px;
     display: flex;
     flex-flow: row nowrap;
+}
+.mt75{
+    margin-top: 75px;
+}
+.inp-select{
+    width: 580px;   
+}
+.last-btn{
+    margin-right: 0;
 }
 .filter-top-bar-inp{
     min-width: 300px;

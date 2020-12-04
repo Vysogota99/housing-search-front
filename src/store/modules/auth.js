@@ -10,11 +10,14 @@ export default {
             axios.post(url + "/login", requestData, 
             {
                 headers: headers,
+            },
+            {
+                withCredentials: true 
             })
             .then(function(response) {
                 setTimeout(() => {context.commit("updateLoginMessageVisible", false);
                 router.push("/");
-            }, 2000);
+            }, 1000);
                 
                 context.commit("updateUser", response.data.user);
                 context.commit("updateAuthStatus", true);
@@ -27,6 +30,8 @@ export default {
                 
                 localStorage.setItem("access_token", response.data.access_token);
                 localStorage.setItem("refresh_token", response.data.refresh_token);
+
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.access_token
             })
             .catch(function(error) {
                 const status = error.response.status;
@@ -34,7 +39,7 @@ export default {
                 context.commit("updateLoginMessageType", "error");
                 context.commit("updateLoginMessageVisible", true);
 
-                setTimeout(() => context.commit("updateLoginMessageVisible", false), 2000);
+                setTimeout(() => context.commit("updateLoginMessageVisible", false), 1000);
                 if(status == '422') {
                     context.commit("updateLoginMessage", "Поля заполнены неправильно!");
                 }else 
@@ -52,17 +57,16 @@ export default {
         logoutUser(context) {
             let url = context.getters.getURL;
             let headers = context.getters.getHeaders;
-            let accessToken = context.getters.getAccessToken;
 
-            headers.Authorization = "Bearer " + accessToken;
             axios.post(url + "/logout", {}, {
                 headers: headers,
             },
             {
                 withCredentials: true 
             })
-            .then(function(response){
-                console.log(response);
+            .then(function(){
+                
+                delete axios.defaults.headers.common["Authorization"];
                 localStorage.removeItem("access_token");
                 localStorage.removeItem("refresh_token");
 
@@ -79,6 +83,7 @@ export default {
     mutations: {
         updateUser(state, user) {
             state.user = user;
+            state.role = user.Role;
         },
         updateAccessToken(state, token) {
             state.accessToken = token;
@@ -107,7 +112,9 @@ export default {
         accessToken: localStorage.getItem('access_token') || '',
         refreshToken: localStorage.getItem('refresh_token') || '',
         isAuthorized: localStorage.getItem('access_token') ? true: false,
+
         user: {},
+        role: 0,
 
         LoginMessageVisible: false,
         LoginMessage: "",
@@ -143,6 +150,6 @@ export default {
         },
         authStatus(state) {
             return state.isAuthorized;
-        }
+        },
     },
 }

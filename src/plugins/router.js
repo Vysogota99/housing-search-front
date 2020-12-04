@@ -34,6 +34,7 @@ const routes = [
         component: AccountComponent,
         meta: {
             requiresAuth: true,
+            
         }
     },
     {

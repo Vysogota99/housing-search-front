@@ -13,7 +13,7 @@
             </v-icon>
             </v-btn>
         </div>
-        <FilterComponent :isActive="closeOverlayFn" :overlay="overlay"/>
+        <FilterComponent :isActive="closeOverlayFn" :overlay="overlay" :whatToDo="fnToOverlay"/>
         <MapComponent :zoom="mapZoom" :coords="mapCenter" :points="rooms"/>
     </div>
 </template>
@@ -31,7 +31,7 @@ export default {
     },
     data(){
         return{
-            overlay: true,
+            overlay: false,
 
             rooms: [],
             mapCenter: [55.76, 37.64],
@@ -40,7 +40,7 @@ export default {
         }
     },
     methods: {
-        getRooms: function(limit, offset) {
+        getRooms: function(limit=this.limit, offset=1) {
             let self = this;
             axios.get(config.apiURL + '/rooms',
                 {
@@ -62,10 +62,14 @@ export default {
         },
         closeOverlayFn: function() {
             this.overlay = false;
+        },
+        fnToOverlay: function() {
+            this.getRooms();
+            this.closeOverlayFn();
         }
     },
     created: function(){
-      //  this.getRooms(this.limit, 1);
+       this.getRooms(this.limit, 1);
     },
 }
 </script>

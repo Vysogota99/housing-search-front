@@ -307,13 +307,13 @@
                 </div>
                 <div class="col-4 right-col no-pading-bot">
                     <div class="checkbox">
-                        <input type="checkbox" id="pass_elev" v-model="pass_elev">
+                        <input type="checkbox" id="pass_elev" v-model="service_elev">
                         <label for="pass_elev"><span>грузовой лифт</span></label>
                     </div>
                 </div>
                 <div class="col-5 right-col no-pading-bot">
                     <div class="checkbox">
-                        <input type="checkbox" id="service_elev" v-model="service_elev">
+                        <input type="checkbox" id="service_elev" v-model="pass_elev">
                         <label for="service_elev"><span>пассажирский лифт</span></label>
                     </div>
                 </div>
@@ -322,7 +322,7 @@
 
             <div class="row">
                 <div class="col-3 left-col">
-                    <span>До метро</span>
+                    <span>Ремонт</span>
                 </div>
                 <div class="col-9 right-col">
                     <div class="form_radio_group">
@@ -383,7 +383,7 @@
         <hr>
         <div class="filter-footer">
             <button class="btn-no-bgc">Очистить все</button>
-            <button class="default-btn mr0">Применить</button>
+            <button class="default-btn mr0" @click="whatToDo()">Применить</button>
         </div>
     </div>
 </v-overlay>
@@ -403,6 +403,10 @@ export default {
         },
         overlay: {
             type: Boolean,
+            required: true,
+        },
+        whatToDo: {
+            type: Function,
             required: true,
         }
     },
@@ -483,10 +487,11 @@ export default {
             },
             set(value) {
                 this.updateRoomTtmetroTime(value);
-                if(value > 0 && value != '') {
+                const type = this.roomTtmetroType
+                if(value > 0 && value != '' && type != '') {
                     const result = "<" + value;
                     this.setToFilterRooms({
-                        key: '',
+                        key: type,
                         value: result,
                     })
                 }else
@@ -502,17 +507,19 @@ export default {
                 return this.roomTtmetroType;
             },
             set(value) {
+                this.deleteFromFilterRooms('time_to_metro_by_transport');
+                this.deleteFromFilterRooms('time_to_metro_on_foot');
+                
                 const time = this.roomTtmetroTime;
                 this.updateRoomTtmetroType(value);
                 if(value != '' && time > 0 && time != '') {
-                    const result = time;
+                    const result =  "<" + time;
                     this.setToFilterRooms({
                         key: this.roomTtmetroType,
                         value: result,
                     })
                 }else{
-                    
-                    this.deleteFromFilterRooms('ttmetro_type');
+                    this.deleteFromFilterRooms(value);
                 }
             }
         },

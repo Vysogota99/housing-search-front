@@ -101,6 +101,15 @@ export default {
         updateTwobedplace(state, value) {
             state.two_bed_place = value;
         },
+        updateMinPrice(state, value) {
+            state.min_price = value;
+        },
+        updateOrderBy(state, value) {
+            state.order_by = value;
+        },
+        updateAddress(state, value) {
+            this.address = value;
+        }
     },
     state: {
         roomTtmetroType: '',
@@ -134,9 +143,29 @@ export default {
         one_bed_place: 0,
         two_bed_place: 0,
         ttmetro_type: '',
+        min_price: 0,
+        order_by: {
+            id: 1,
+            name:'время создания объявления - сначала новые',
+            data: {
+                target: 'desc',
+                teg: 'created_at',
+            }
+        },
+        address: '',
+
         filterRooms: new Map,
     },
     getters: {
+        getMinPrice(state) {
+            return state.min_price;
+        },
+        getOrderBy(state) {
+            return state.order_by;
+        },
+        getAddress(state) {
+            return state.address;
+        },
         filterRooms(state) {
             return state.filterRooms;
         },
