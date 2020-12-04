@@ -25,7 +25,7 @@
             </div>
             <div class="right-content">
                 <ul class="hr">
-                    <li>ДОБАВИТЬ ОБЪЯВЛЕНИЕ</li>
+                    <li>ДОБАВИТЬ КВАРТИРУ</li>
                 </ul>
                 <v-menu offset-y>
                     <template v-slot:activator="{ on, attrs }">
@@ -84,8 +84,8 @@ export default {
             url: '/account' 
         },
         { 
-            title: 'Объявления',
-            url: '/', 
+            title: 'Мои объявления',
+            url: '/my-ads', 
         },
         { 
             title: 'Выход',

@@ -57,7 +57,10 @@ export default {
         logoutUser(context) {
             let url = context.getters.getURL;
             let headers = context.getters.getHeaders;
+            let accessToken = context.getters.getAccessToken;
 
+
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + accessToken;
             axios.post(url + "/logout", {}, {
                 headers: headers,
             },
@@ -73,6 +76,8 @@ export default {
                 context.commit("updateAccessToken", "");
                 context.commit("updateRefreshToken", "");
                 context.commit("updateAuthStatus", false);
+
+                router.push("/login");
 
             })
             .catch(function(error){

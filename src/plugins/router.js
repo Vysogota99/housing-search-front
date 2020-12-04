@@ -9,6 +9,7 @@ import AccountComponent from '../components/AccountComponent.vue'
 import RoomsComponent from '../components/RoomsComponent.vue'
 import RoomsMapComponent from '../components/RoomsMapComponent.vue'
 import SearchHomeComponent from '../components/SearchHomeComponent.vue'
+import MyAdsComponen from '../components/MyAdsComponent.vue'
 
 
 Vue.use(VueRouter);
@@ -51,6 +52,11 @@ const routes = [
         path: '/lots',
         name: 'lots-cards',
         component: SearchHomeComponent,
+    },
+    {
+        path: '/my-ads',
+        name: 'my-ads',
+        component: MyAdsComponen,
     }
 ]
 
