@@ -49,7 +49,9 @@
                             :key="index"
                         >
                                 <router-link v-bind:to="item.url" v-if="item.url != '/logout'">
-                                    <v-list-item-title>{{ item.title }}</v-list-item-title>
+                                    <v-list-item-title>
+                                        {{ item.title }}
+                                    </v-list-item-title>
                                 </router-link>
 
                                 <a v-else @click="logoutUser">
@@ -81,15 +83,18 @@ export default {
       itemsUser: [
         { 
             title: 'Профиль',
-            url: '/account' 
+            url: '/account',
+            role: '0',
         },
         { 
             title: 'Мои объявления',
             url: '/my-ads', 
+            role: '1',
         },
         { 
             title: 'Выход',
             url: '/logout',
+            role: '0',
         },
       ],
       itemsGuest: [
@@ -106,6 +111,7 @@ export default {
     computed: {
         ...mapGetters([
             "authStatus",
+            "getRole",
         ]),
     },
     methods: {

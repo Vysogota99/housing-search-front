@@ -507,8 +507,8 @@ export default {
             const self = this;
             const headers ={
                 'Content-Type': 'application/x-www-form-urlencoded',
-            } 
-            axios.post(config.apiUrl + '/signup', 
+            }         
+            axios.post(config.apiURL + '/signup', 
             User,
             {
                 headers: headers,

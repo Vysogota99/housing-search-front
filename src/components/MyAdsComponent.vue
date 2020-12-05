@@ -76,7 +76,6 @@ export default {
     margin: 100px auto;
     height: 1000px;
     padding: 40px 0px;
-
 }
 .ads-content{
     display: flex;

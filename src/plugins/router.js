@@ -10,6 +10,7 @@ import RoomsComponent from '../components/RoomsComponent.vue'
 import RoomsMapComponent from '../components/RoomsMapComponent.vue'
 import SearchHomeComponent from '../components/SearchHomeComponent.vue'
 import MyAdsComponen from '../components/MyAdsComponent.vue'
+import CreateAdComponent from '../components/CreateAdComponent.vue'
 
 
 Vue.use(VueRouter);
@@ -57,6 +58,19 @@ const routes = [
         path: '/my-ads',
         name: 'my-ads',
         component: MyAdsComponen,
+        meta: {
+            requiresAuth: true,
+            role: 1,
+        }
+    },
+    {
+        path: '/lot/create',
+        name: 'create ad',
+        component: CreateAdComponent,
+        meta: {
+            requiresAuth: true,
+            role: 1,
+        }
     }
 ]
 

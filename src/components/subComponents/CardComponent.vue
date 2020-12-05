@@ -93,13 +93,17 @@ export default {
     margin: 15px 10px;
     min-width: 800px;
     min-height: 380px;
-    border: 2px solid #512DE4;
+    border: 0px solid #512DE4;
     border-radius: 20px;
     padding: 20px;
 
     display: flex;
     flex-flow: row wrap;
     justify-content: space-between;
+
+    box-shadow:0px 1px 7px 0px rgba(0,0,0,0.45);
+    -webkit-box-shadow:0px 1px 7px 0px rgba(0,0,0,0.45);
+    -moz-box-shadow:0px 1px 7px 0px rgba(0,0,0,0.45);
 }
 .card-left-container{
     display: flex;

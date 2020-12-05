@@ -5,47 +5,49 @@
         <div class="row" id="filters-top-bar">
             <div class="col-1"></div>
             <div class="col-10">
-            <div class="filters-bar mt75">
-                <input type="text" class="default-input filter-top-bar-inp" placeholder="введите адрес" v-model="address">      
-                <v-slider
-                    label="Цена >"
-                    v-model="minPrice"
-                    class="align-center"
-                    :max="max"
-                    :min="min"
-                >
-                    <template v-slot:append>
-                        <v-text-field
-                            v-model="minPrice"
-                            class="mt-0 pt-0"
-                            hide-details
-                            single-line
-                            type="number"
-                            style="width: 60px"
-                        ></v-text-field>
-                    </template>
-                </v-slider>
-            </div>      
-            <div class="filters-bar">    
-                <select class="form-control default-input inp-select" id="exampleFormControlSelect1" v-model="selectedSort">
-                    <option v-for="item in sortBy" :key="item.id" v-bind:value="item.data">{{item.name}}</option>
-                </select>
-                <v-btn
-                    class="mx-2"
-                    fab
-                    dark
-                    color="#512DE4"
-                    @click="overlay=true"
-                >
-                <v-icon dark>
-                    mdi-filter-outline
-                </v-icon>
-                </v-btn>
-                <button class="default-btn" @click="getRooms(limit,1)">Найти</button> 
-                <router-link to="/rooms/map">
-                    <button class="default-btn last-btn">Карта</button> 
-                </router-link>
-            </div> 
+            <div class="top-bar">
+                <div class="filters-bar">
+                    <input type="text" class="default-input filter-top-bar-inp" placeholder="введите адрес" v-model="address">      
+                    <v-slider
+                        label="Цена >"
+                        v-model="minPrice"
+                        class="align-center"
+                        :max="max"
+                        :min="min"
+                    >
+                        <template v-slot:append>
+                            <v-text-field
+                                v-model="minPrice"
+                                class="mt-0 pt-0"
+                                hide-details
+                                single-line
+                                type="number"
+                                style="width: 60px"
+                            ></v-text-field>
+                        </template>
+                    </v-slider>
+                </div>      
+                <div class="filters-bar">    
+                    <select class="form-control default-input inp-select" id="exampleFormControlSelect1" v-model="selectedSort">
+                        <option v-for="item in sortBy" :key="item.id" v-bind:value="item.data">{{item.name}}</option>
+                    </select>
+                    <v-btn
+                        class="mx-2"
+                        fab
+                        dark
+                        color="#512DE4"
+                        @click="overlay=true"
+                    >
+                    <v-icon dark>
+                        mdi-filter-outline
+                    </v-icon>
+                    </v-btn>
+                    <button class="default-btn" @click="getRooms(limit,1)">Найти</button> 
+                    <router-link to="/rooms/map">
+                        <button class="default-btn last-btn">Карта</button> 
+                    </router-link>
+                </div> 
+            </div>
             </div>
             <div class="col-1">
                 <div class="map-control">
@@ -279,6 +281,16 @@ export default {
 </script>
 
 <style>
+.top-bar{
+    background-color: #fff;
+    border-radius: 25px;
+    margin-top: 25px;
+    padding: 25px 15px 10px 15px;
+
+    box-shadow:0px 1px 7px 0px rgba(0,0,0,0.45);
+    -webkit-box-shadow:0px 1px 7px 0px rgba(0,0,0,0.45);
+    -moz-box-shadow:0px 1px 7px 0px rgba(0,0,0,0.45);
+}
 .rooms-container{
     margin-top: 95px;
     display: flex;
@@ -326,11 +338,8 @@ export default {
     display: flex;
     flex-flow: row nowrap;
 }
-.mt75{
-    margin-top: 75px;
-}
 .inp-select{
-    width: 580px;   
+    width: 550px;   
 }
 .last-btn{
     margin-right: 0;

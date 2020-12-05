@@ -69,12 +69,15 @@ export default {
 
 <style>
 .ad{
-    border: 2px solid #512DE4;
+    border: 0px solid #512DE4;
     border-radius: 25px;
     width: 520px;
     height: 400px;
     margin: 5px;
     padding: 20px 15px;
+    box-shadow:0px 1px 7px 0px rgba(0,0,0,0.45);
+-webkit-box-shadow:0px 1px 7px 0px rgba(0,0,0,0.45);
+-moz-box-shadow:0px 1px 7px 0px rgba(0,0,0,0.45);
 }
 .ad span{
     font-size: 18px;
