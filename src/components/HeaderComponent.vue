@@ -44,20 +44,44 @@
                     </template>
 
                     <v-list v-if="authStatus">
-                        <v-list-item
-                            v-for="(item, index) in itemsUser"
-                            :key="index"
-                        >
-                                <router-link v-bind:to="item.url" v-if="item.url != '/logout'">
-                                    <v-list-item-title>
-                                        {{ item.title }}
-                                    </v-list-item-title>
+                        <v-list-item>
+                                <router-link to="/account">
+                                    <v-list-item-content>
+                                        <v-list-item-title>
+                                            Профиль
+                                        </v-list-item-title>
+                                    </v-list-item-content>
                                 </router-link>
-
-                                <a v-else @click="logoutUser">
-                                    {{item.title}}
-                                </a>
                         </v-list-item>
+
+                        <v-list-item v-if="getRole == 1"> 
+                                <router-link to="/my-ads">
+                                    <v-list-item-content>
+                                        <v-list-item-title>
+                                            Мои объявления
+                                        </v-list-item-title>
+                                    </v-list-item-content>
+                                </router-link>
+                        </v-list-item>
+
+                         <v-list-item v-if="getRole == 1"> 
+                                <router-link to="/lot/template">
+                                    <v-list-item-content>
+                                        <v-list-item-title>
+                                            Мои шаблоны
+                                        </v-list-item-title>
+                                    </v-list-item-content>
+                                </router-link>
+                        </v-list-item>
+
+                        <v-list-item @click="logoutUser()">
+                              <v-list-item-content>
+                                <v-list-item-title>
+                                    Выход
+                                </v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+
                     </v-list>
                     <v-list v-else>
                         <v-list-item
@@ -84,7 +108,6 @@ export default {
         { 
             title: 'Профиль',
             url: '/account',
-            role: '0',
         },
         { 
             title: 'Мои объявления',
@@ -94,7 +117,6 @@ export default {
         { 
             title: 'Выход',
             url: '/logout',
-            role: '0',
         },
       ],
       itemsGuest: [

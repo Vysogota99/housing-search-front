@@ -72,7 +72,7 @@ export default {
 <style>
 .my-ads{
     margin-top: 100px;
-    width: 1600px;
+    max-width: 1600px;
     margin: 100px auto;
     height: 1000px;
     padding: 40px 0px;

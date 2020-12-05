@@ -23,6 +23,8 @@ export default {
                 context.commit("updateAuthStatus", true);
                 context.commit("updateAccessToken", response.data.access_token);
                 context.commit("updateRefreshToken", response.data.refresh_token);
+                context.commit("updateRole", response.data.user.Role);
+                
 
                 context.commit("updateLoginMessageType", "success");
                 context.commit("updateLoginMessageVisible", true);
@@ -30,6 +32,7 @@ export default {
                 
                 localStorage.setItem("access_token", response.data.access_token);
                 localStorage.setItem("refresh_token", response.data.refresh_token);
+                localStorage.setItem('role', response.data.user.Role);
 
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.access_token
             })
@@ -72,10 +75,12 @@ export default {
                 delete axios.defaults.headers.common["Authorization"];
                 localStorage.removeItem("access_token");
                 localStorage.removeItem("refresh_token");
+                localStorage.removeItem('role');
 
                 context.commit("updateAccessToken", "");
                 context.commit("updateRefreshToken", "");
                 context.commit("updateAuthStatus", false);
+                context.commit("updateRole", "");
 
                 router.push("/login");
 
@@ -88,7 +93,9 @@ export default {
     mutations: {
         updateUser(state, user) {
             state.user = user;
-            state.role = user.Role;
+        },
+        updateRole(state, role) {
+            state.role = role;
         },
         updateAccessToken(state, token) {
             state.accessToken = token;
@@ -119,7 +126,7 @@ export default {
         isAuthorized: localStorage.getItem('access_token') ? true: false,
 
         user: {},
-        role: 0,
+        role: localStorage.getItem('role'),
 
         LoginMessageVisible: false,
         LoginMessage: "",
@@ -136,7 +143,8 @@ export default {
             return state.user;
         },
         getRole(state) {
-            return state.user.Role;
+            console.log(state.role);
+            return state.role;
         },
         getLoginMessageVisible(state) {
             return state.LoginMessageVisible;
