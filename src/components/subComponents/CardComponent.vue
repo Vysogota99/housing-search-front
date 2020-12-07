@@ -11,8 +11,7 @@
             ></v-img>
             </div>
             <div class="card-descr-one">
-                <h2 v-if="room.description">{{room.description}}</h2>
-                <h2 v-else>Сдается комната</h2>
+                <h2>Сдается комната</h2>
                 <h3>{{room.address}}</h3>
                 <p>
                     <v-icon
@@ -31,7 +30,9 @@
                 <p>
                    Площадь квартиры {{room.flat_area}} м<sup>2</sup>, площадь комнаты {{room.area}} м<sup>2</sup></p>
                 <p>Этаж {{room.floor}}/{{room.floor_total}}</p>
-
+                <p class="card-description">
+                    {{room.description}}
+                </p>
             </div>
         </div>
         <div class="card-descr-two">
@@ -70,7 +71,7 @@
                     </v-btn>
                 </div>
             </div>
-            <p id="price">12500 	&#8381;/месяц</p>
+            <p id="price">{{room.room_price}}&#8381;/месяц</p>
             <div class="default-btn" id="open-lot">
                 Подробнее
             </div>
@@ -170,5 +171,8 @@ export default {
 #open-lot{
     padding: 12px 0px;
     text-align: center;
+}
+.card-description{
+    max-width: 400px;
 }
 </style>

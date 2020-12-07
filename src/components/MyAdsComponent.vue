@@ -4,7 +4,7 @@
             <div class="ads-content">
                 <AdComponent v-for="ad in ads" :key="ad.id" :data="ad"/>
             </div>
-            <div class="pagination">
+            <div class="pagination" v-if="ads.length > 0 && nPages > 1">
                 <v-pagination
                     v-model="currPage"
                     color="#512DE4"
@@ -69,7 +69,7 @@ export default {
             })
         }
     },
-    created: function(){
+    beforeMount: function(){
         this.getMyAds();
     },
 }

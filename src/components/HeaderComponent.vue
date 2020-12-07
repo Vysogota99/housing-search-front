@@ -101,39 +101,41 @@
 <script>
 
 import {mapGetters, mapActions} from "vuex"
-
+import config from '../config'
 export default {
     data: () => ({
-      itemsUser: [
-        { 
-            title: 'Профиль',
-            url: '/account',
-        },
-        { 
-            title: 'Мои объявления',
-            url: '/my-ads', 
-            role: '1',
-        },
-        { 
-            title: 'Выход',
-            url: '/logout',
-        },
-      ],
-      itemsGuest: [
-          {
-              title: "Регистрация",
-              url: "/signup",
-          },
-          {
-              title: "Вход",
-              url: "/login"
-          }
-      ]
+        apiUrl: config.apiURL,      
+        itemsUser: [
+            { 
+                title: 'Профиль',
+                url: '/account',
+            },
+            { 
+                title: 'Мои объявления',
+                url: '/my-ads', 
+                role: '1',
+            },
+            { 
+                title: 'Выход',
+                url: '/logout',
+            },
+        ],
+        itemsGuest: [
+            {
+                title: "Регистрация",
+                url: "/signup",
+            },
+            {
+                title: "Вход",
+                url: "/login"
+            }
+        ]
     }),
     computed: {
         ...mapGetters([
             "authStatus",
             "getRole",
+            "getAvatarURL",
         ]),
     },
     methods: {
@@ -239,5 +241,12 @@ ul.hr li {
     color: #000;
     display: inline; /* Отображать как строчный элемент */
     margin-right: 15px; /* Отступ слева */ 
+}
+.avatar-btn{
+    width: 60px;
+    height: 60px;
+    border-radius: 100%;
+    overflow: hidden;
+    border: 2px solid #512DE4;
 }
 </style>

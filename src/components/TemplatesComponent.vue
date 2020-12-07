@@ -1,6 +1,5 @@
 <template>
     <div class="templ-container">
-        <h2>Список шаблонов жилья</h2>
         <div class="templ-content" v-if="templates.length">
             <div class="templ" v-for="tmp in templates" :key="tmp.id">
                 <div>
@@ -22,7 +21,7 @@
                 На данные момент, у вас нет шаблонов ...
             </h1>
         </div>
-        <div class="pagination" v-if="templates.length > 0">
+        <div class="pagination" v-if="templates.length > 0 && nPages > 1">
             <v-pagination
                 v-model="currPage"
                 color="#512DE4"
@@ -76,7 +75,7 @@ export default {
             return dt.getDay() + '.' + dt.getMonth() + '.' + dt.getFullYear()
         }
     },
-    created: function() {
+    beforeMount: function() {
         this.getTemplates()
     }
 }
