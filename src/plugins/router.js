@@ -9,6 +9,7 @@ import AccountComponent from '../components/AccountComponent.vue'
 import RoomsComponent from '../components/RoomsComponent.vue'
 import RoomsMapComponent from '../components/RoomsMapComponent.vue'
 import SearchHomeComponent from '../components/SearchHomeComponent.vue'
+import AddFlatComponent from '../components/AddFlatComponent.vue'
 
 
 Vue.use(VueRouter);
@@ -50,7 +51,12 @@ const routes = [
         path: '/lots',
         name: 'lots-cards',
         component: SearchHomeComponent,
-    }
+    },
+    {
+        path: '/addflat',
+        name: 'addflat',
+        component: AddFlatComponent,
+    },
 ]
 
 let router = new VueRouter({
