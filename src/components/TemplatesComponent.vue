@@ -18,13 +18,11 @@
             </div>
         </div>
         <div class="ads-container no-ads" v-if="!templates.length">
-            <h1>Пока что вы не
-                <router-link to="/lot/create/1"> 
-                    добавили
-                </router-link>
-            ни одного объявления ... (</h1>
+            <h1>
+                На данные момент, у вас нет шаблонов ...
+            </h1>
         </div>
-        <div class="pagination" v-if="templates.length && templates.length >= 10">
+        <div class="pagination" v-if="templates.length > 0">
             <v-pagination
                 v-model="currPage"
                 color="#512DE4"
@@ -38,7 +36,7 @@
 <script>
 import config from '../config'
 import axios from 'axios'
-import {mapGetters} from 'vuex'
+import {mapGetters, mapActions} from 'vuex'
 export default {
     data: function() {
         return {
@@ -53,6 +51,9 @@ export default {
         ]),
     },
     methods: {
+        ...mapActions([
+            "logoutUser",
+        ]),
         getTemplates: function() {
             let self = this;
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.getAccessToken;
@@ -66,8 +67,8 @@ export default {
                 self.nPages = response.data.result.num_pages;
                 self.currPage = response.data.result.curr_page;
             })
-            .catch(function(error){
-                console.log(error.request);
+            .catch(function(){
+                self.logoutUser();
             })
         },
         convertDate: function(date) {
@@ -83,7 +84,6 @@ export default {
 
 <style>
 .templ-container{
-    margin-top: 100px;
     max-width: 1600px;
     margin: 100px auto;
     margin-bottom: 0;

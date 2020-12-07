@@ -85,8 +85,18 @@ export default {
                 router.push("/login");
 
             })
-            .catch(function(error){
-                console.log(error.response);
+            .catch(function(){
+                delete axios.defaults.headers.common["Authorization"];
+                localStorage.removeItem("access_token");
+                localStorage.removeItem("refresh_token");
+                localStorage.removeItem('role');
+
+                context.commit("updateAccessToken", "");
+                context.commit("updateRefreshToken", "");
+                context.commit("updateAuthStatus", false);
+                context.commit("updateRole", "");
+
+                router.push("/login");
             })
         }
     },

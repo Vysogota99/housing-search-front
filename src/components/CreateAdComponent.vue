@@ -1,10 +1,31 @@
 <template>
     <div class="create-ad">
-        <div class="create-ad-flat">
+            <v-alert
+                class="create-ad-alert"
+                dense
+                outlined
+                :type="alertType"
+                v-if="alertVisible"
+            >
+                {{alertText}}
+            </v-alert>
+        <div class="create-ad-flat mb-10">
             <div class="create-ad-row">
                 <div class="ml-4"> <h3>{{construct.address}}</h3> </div>
                 <div>
-                    <button class="default-btn w278">
+                    <v-btn
+                        class="mx-2"
+                        fab
+                        dark
+                        small
+                        color="red"
+                        @click="deleteAd()"
+                    >
+                    <v-icon dark>
+                        mdi-delete
+                    </v-icon>
+                    </v-btn>
+                    <button class="default-btn w200" v-if="construct.is_constructor" @click="createAd()">
                         Применить
                     </button>
                 </div>
@@ -24,21 +45,15 @@
                         <p v-show="construct.microwave_oven">Микроволновка<span></span></p>
                         <p v-show="construct.refrigerator">Холодильник<span></span></p>
                         <p v-show="construct.internet">Интернет<span></span></p>
-                        <p v-show="construct.bathroom">Пол<span></span></p>
+                        <p v-show="construct.sex">Пол<span></span></p>
                     </div>
                 </div>
                 <div class="flat-inputs">
                     <label>Цена за квартиру</label>
-                        <input type="text" class="default-input mb-2 mt-1 ml-2 mr-1" placeholder="0">&#8381;
-                    <br>
-                    <label>Комиссия</label>
-                        <input type="text" class="default-input mb-2 ml-2 mr-1" placeholder="0">%
+                        <input type="text" class="default-input mb-2 mt-1 ml-2 mr-1" placeholder="0" v-model="dataToUPdate.lot.price">&#8381;
                     <br>
                     <label>Залог</label>
-                        <input type="text" class="default-input mb-2 ml-2 mr-1" placeholder="0">&#8381;
-                    <br>
-                    <label>Предоплата</label>
-                        <input type="text" class="default-input ml-2 mr-1" placeholder="0">&#8381;
+                        <input type="text" class="default-input mb-2 ml-2 mr-1" placeholder="0" v-model="dataToUPdate.lot.deposit">&#8381;
                     <br>
                 </div>
 
@@ -50,11 +65,16 @@
                     </span>
                 </label>
                 <br>
-                <textarea class="form-control txtarea" id="exampleFormControlTextarea1" rows="3"></textarea>
+                <textarea class="form-control txtarea" id="exampleFormControlTextarea1" rows="3" v-model="dataToUPdate.lot.description"></textarea>
             </div>
-            <div class="checkbox mb-3 ml-3 mt-3">
-                <input type="checkbox" id="showAd"  v-model="construct.is_visible">
-                <label for="showAd"><span id="ad-checkbox">показывать объявление в поиске</span></label>
+            <div class="create-ad-row mt-3">
+                <div class="checkbox mb-3 ml-3 mt-3">
+                    <input type="checkbox" id="showAd"  v-model="dataToUPdate.lot.is_visible">
+                    <label for="showAd"><span id="ad-checkbox">показывать объявление в поиске</span></label>
+                </div>
+                <div>
+                    <button class="btn-save" @click="saveFlat()" v-if="!construct.is_constructor">Сохранить</button>
+                </div>
             </div>
         </div>
 
@@ -84,16 +104,10 @@
                 </div>
                 <div class="flat-inputs">
                     <label>Цена за комнату</label>
-                        <input type="text" class="default-input mb-2 mt-1 ml-2 mr-1" placeholder="0">&#8381;
-                    <br>
-                    <label>Комиссия</label>
-                        <input type="text" class="default-input mb-2 ml-2 mr-1" placeholder="0">%
+                        <input type="text" class="default-input mb-2 mt-1 ml-2 mr-1" placeholder="0" v-model="dataToUPdate.rooms[index].price">&#8381;
                     <br>
                     <label>Залог</label>
-                        <input type="text" class="default-input mb-2 ml-2 mr-1" placeholder="0">&#8381;
-                    <br>
-                    <label>Предоплата</label>
-                        <input type="text" class="default-input ml-2 mr-1" placeholder="0">&#8381;
+                        <input type="text" class="default-input mb-2 ml-2 mr-1" placeholder="0" v-model="dataToUPdate.rooms[index].deposit">&#8381;
                     <br>
                 </div>
 
@@ -105,14 +119,15 @@
                     </span>
                 </label>
                 <br>
-                <textarea class="form-control txtarea" id="exampleFormControlTextarea1" rows="3"></textarea>
+                <textarea class="form-control txtarea" id="exampleFormControlTextarea1" rows="3" v-model="dataToUPdate.rooms[index].description"></textarea>
             </div>
             <div class="create-ad-row mt-3">
                 <div class="checkbox mt-3 ml-3">
-                    <input type="checkbox" id="showAd" >
-                    <label for="showAd"><span id="ad-checkbox">показывать комнату в поиске</span></label>
+                    <input type="checkbox" v-bind:id="'show_room_card_'+room.id" v-model="dataToUPdate.rooms[index].is_visible">
+                    <label v-bind:for="'show_room_card_'+room.id"><span id="ad-checkbox">показывать комнату в поиске</span></label>
                 </div>
                 <div>
+                    <button class="btn-save" @click="saveRoom(room.id, index)" v-if="!construct.is_constructor">Сохранить</button>
                     <button class="default-btn" @click="hideCard(index)"  v-if="visibleCardsStatus[index]">Скрыть</button>
                     <button class="default-btn" @click="hideCard(index)"  v-if="!visibleCardsStatus[index]">Раскрыть</button>
                 </div>
@@ -125,21 +140,35 @@
 import ImagesBlockComponent from "./subComponents/ImagesBlockComponent";
 import config from "../config";
 import axios from "axios";
+import {mapActions, mapGetters} from 'vuex'
 export default {
   components: { ImagesBlockComponent },
   data: function(){
       return {
           construct: {},
           visibleCardsStatus: [],
+          dataToUPdate: {
+              lot: {},
+              rooms: [],
+          },
+          
+          alertText: "Изменения сохранены",
+          alertType: "success",
+          alertVisible: false,
       }
   },
   computed: {
-
+      ...mapGetters([
+          'getAccessToken',
+      ])
   },
   created: function(){
       this.getObjects();
   },
   methods: {
+        ...mapActions([
+            "logoutUser",
+        ]),
       getObjects: function() {
             let self = this;
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.getAccessToken;
@@ -155,11 +184,13 @@ export default {
                 for(let i = 0; i < self.construct.rooms.length; i++) {
                     self.visibleCardsStatus[i] = false;
                 }
-                console.log(self.visibleCardsStatus);
-                
+
+                self.copyData();
             })
-            .catch(function(){
-                // self.$router.push("/");
+            .catch(function(error){
+                if(!error.response){
+                    self.$router.push("/");
+                }
             })
       },
       repair: function() {
@@ -194,10 +225,215 @@ export default {
             this.visibleCardsStatus[i] = !this.visibleCardsStatus[i]
             this.$set(this.visibleCardsStatus, i, this.visibleCardsStatus[i]);
       },
+      deleteAd: function() {
+            const self = this;
+            const url = config.apiURL + '/lot';
+            axios.delete(url, {
+                params: {
+                    'lotid': self.construct.id, 
+                },
+            },
+            {
+                fields: self.dataToUPdate.lot,
+            },
+            {
+                withCredentials: true,
+            })
+            .then(function(){
+                self.alertText = 'Изменения сохранены';
+                self.alertType = 'success';
+                self.alertVisible = true
+                setTimeout(() => {
+                    self.alertVisible = false;
+                    self.$router.push("/my-ads");
+                }, 1500)
+            })
+            .catch(function(error){
+                console.log(error.response);
+                if(!error.response) {
+                    self.logoutUser();
+                }
+
+                self.alertText = 'Не удалось внести изменения';
+                self.alertType = 'error';
+                self.alertVisible = true
+                setTimeout(() => {
+                    self.alertVisible = false;
+                }, 1500)
+            })  
+      },
+      saveFlat: function() {
+            const self = this;
+            const url = config.apiURL + '/lot/update/' + self.construct.id;
+
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.getAccessToken
+            axios.patch(url,
+            {
+                fields: self.dataToUPdate.lot,
+            },
+            {
+                withCredentials: true,
+            })
+            .then(function(){
+                self.alertText = 'Изменения сохранены';
+                self.alertType = 'success';
+                self.alertVisible = true
+                setTimeout(() => {
+                    self.alertVisible = false;
+                }, 1500)
+            })
+            .catch(function(error){
+                console.log(error.response);
+                if(!error.response) {
+                    self.logoutUser();
+                }
+
+                self.alertText = 'Не удалось внести изменения';
+                self.alertType = 'error';
+                self.alertVisible = true
+                setTimeout(() => {
+                    self.alertVisible = false;
+                }, 1500)
+            })  
+            
+      },
+      saveRoom: function(roomID, arrIndex) {
+            const self = this;
+            const url = config.apiURL + '/rooms/room/' + roomID;
+
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.getAccessToken;
+            axios.patch(url,
+            {
+                fields: self.dataToUPdate.rooms[arrIndex],
+            },
+            {
+                withCredentials: true,
+            })
+            .then(function(){
+                self.alertText = 'Изменения сохранены';
+                self.alertType = 'success';
+                self.alertVisible = true
+                setTimeout(() => {
+                    self.alertVisible = false;
+                }, 1500)
+            })
+            .catch(function(error){    
+                console.log(error);
+               if(!error.response) {
+                    self.logoutUser();
+                }
+                self.alertText = 'Не удалось внести изменения';
+                self.alertType = 'error';
+                self.alertVisible = true
+                setTimeout(() => {
+                    self.alertVisible = false;
+                }, 1500)
+            })     
+      },
+      createAd: function() {
+            let requestData = {
+                lot: {
+                    id: this.construct.id,
+                    fields: this.dataToUPdate.lot,
+                },
+                rooms: [], 
+            }
+
+            for(let i = 0; i < this.construct.rooms.length; i++) {
+                requestData.rooms[i] = {
+                    id: this.construct.rooms[i].id,
+                    fields: this.dataToUPdate.rooms[i],
+                }
+            }
+
+            const self = this;
+            const url = config.apiURL + '/lot/ad';
+            console.log(requestData)
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.getAccessToken
+            axios.patch(url, requestData,
+            {
+                withCredentials: true,
+            })
+            .then(function(){
+                self.alertText = 'Объявление создано';
+                self.alertType = 'success';
+                self.alertVisible = true
+                setTimeout(() => {
+                    self.alertVisible = false;
+                    self.$router.push("/my-ads");
+                }, 1500)
+            })
+            .catch(function(error){
+                console.log(error.response.data);
+                if(!error.response) {
+                    self.logoutUser();
+                }
+
+                self.alertText = 'Не удалось внести изменения';
+                self.alertType = 'error';
+                self.alertVisible = true
+                setTimeout(() => {
+                    self.alertVisible = false;
+                }, 1500)
+            })  
+      },
+      copyData: function() {
+            if(this.construct.flat_price) {
+                this.dataToUPdate.lot.price = this.construct.flat_price;
+            }else{
+                this.dataToUPdate.lot.price = 0;
+            }
+
+            if(this.construct.flat_deposit) {
+                this.dataToUPdate.lot.deposit = this.construct.flat_deposit;
+            }else{
+                this.dataToUPdate.lot.deposit = 0;
+            }
+
+            if(this.construct.description) {
+                this.dataToUPdate.lot.description = this.construct.description;
+            }else{
+                this.dataToUPdate.lot.description = '';
+            }
+
+            this.dataToUPdate.lot.is_visible = this.construct.is_visible;
+
+            for(let i = 0; i < this.construct.rooms.length; i++) {
+                this.dataToUPdate.rooms[i] = {}
+                if(this.construct.rooms[i].room_price) {
+                    this.dataToUPdate.rooms[i].price = this.construct.rooms[i].room_price;
+                }else{
+                    this.dataToUPdate.rooms[i].price = 0;
+                }     
+
+                if(this.construct.rooms[i].room_deposit) {
+                    this.dataToUPdate.rooms[i].deposit = this.construct.rooms[i].room_deposit;
+                }else{
+                    this.dataToUPdate.rooms[i].deposit = 0;
+                }    
+
+                if(this.construct.rooms[i].description) {
+                    this.dataToUPdate.rooms[i].description = this.construct.rooms[i].description;
+                }else{
+                    this.dataToUPdate.rooms[i].description = '';
+                }
+                
+                this.dataToUPdate.rooms[i].is_visible = this.construct.rooms[i].is_visible;
+            }
+      },
   },
+  watch: {
+
+  }
 }
 </script>
 <style>
+.create-ad-alert{
+    position: fixed;
+    top: 110px;
+    right: 45%;
+    z-index: 10;
+}
 .create-ad{
     margin-top: 100px;
     width: 1100px;
@@ -228,8 +464,11 @@ export default {
     font-size: 36px;
     font-weight: 700;
 }
-.w278{
-    width: 278px;
+.w200{
+    width: 200px;
+}
+.w100{
+    width: 120px;
 }
 #ad-checkbox{
     font-size: 24px;
@@ -295,5 +534,32 @@ export default {
     border-radius: 25px;
     min-height: 227px;
     padding: 15px;
+}
+.btn-save{
+    margin-right: 10px;
+    border-radius: 99px;
+    width: 180px;
+    height: 50px;
+    border: 2px solid #512DE4;
+    padding: 8px 23px;
+    color: #512DE4;
+}
+.btn-delete{
+    color: #ff0000;  
+}
+.btn-save:hover{
+    background: linear-gradient(207.73deg, #512DE4 58.15%, #7130C4 89.84%);
+    color: #fff;
+    transition: .2s;
+
+    box-shadow:0px 1px 7px 0px rgba(0,0,0,0.45);
+    -webkit-box-shadow:0px 1px 7px 0px rgba(0,0,0,0.45);
+    -moz-box-shadow:0px 1px 7px 0px rgba(0,0,0,0.45);
+}
+
+.default-btn:hover{
+    box-shadow:0px 1px 7px 0px rgba(0,0,0,0.45);
+    -webkit-box-shadow:0px 1px 7px 0px rgba(0,0,0,0.45);
+    -moz-box-shadow:0px 1px 7px 0px rgba(0,0,0,0.45);
 }
 </style>
