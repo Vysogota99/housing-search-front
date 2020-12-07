@@ -18,6 +18,7 @@
                             <router-link to="/rooms">
                                 <li>комнаты</li>
                             </router-link>
+                            
                         </ul>
                 </div>
             </div>
@@ -25,7 +26,9 @@
             </div>
             <div class="right-content">
                 <ul class="hr">
-                    <li>ДОБАВИТЬ КВАРТИРУ</li>
+                    <router-link to="/addflat">
+                        <li>ДОБАВИТЬ ОБЪЯВЛЕНИЕ</li>
+                    </router-link>
                 </ul>
                 <v-menu offset-y>
                     <template v-slot:activator="{ on, attrs }">
