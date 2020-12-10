@@ -13,6 +13,7 @@ import CreateAdComponent from '../components/CreateAdComponent.vue'
 import NotFoundComponent from '../components/subComponents/NotFoundComponent.vue'
 import TemplatesComponent from '../components/TemplatesComponent.vue'
 import AddFlatComponent from '../components/AddFlatComponent.vue'
+import DetailInfoComponent from '../components/DetailInfoComponent.vue'
 
 Vue.use(VueRouter);
 const routes = [
@@ -80,6 +81,11 @@ const routes = [
             requiresAuth: true,
             role: 1,
         }
+    },
+    {
+        path: '/info',
+        name: 'info-',
+        component: DetailInfoComponent,
     },
     {
         path: '/lot/create',
