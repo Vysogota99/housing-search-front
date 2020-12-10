@@ -111,7 +111,22 @@
                     </div>
                     <input type="file" class="input input__file" id="input__file" ref="fileAvatar" @change="showFile"/>
                     <span class="signup-image-span">Выберите фото</span>
-                    <button class="default-btn ml-2" @click="testFotoUpload">Отправить фото</button>
+                    <span class="span-error invisible" id="avatar-icon-error">
+                            <v-icon 
+                                class="icon invisible"
+                                color="#F36316"
+                            >
+                                mdi-close-outline
+                            </v-icon>
+                            Фото не выбрано
+                    </span>
+                   <v-icon 
+                        class="icon invisible"
+                        id="avatar-icon-success"
+                        color="green"
+                    >
+                        mdi-check-outline
+                    </v-icon>
                 </label>
             </div>
         </div>
@@ -310,6 +325,7 @@ export default {
         passwordRepValid: false,
         telNumberValid: false,
         roleValid: false,
+        avatarValid: false,
 
         alertText: "Отлично, регистрация прошла успешно!",
         alertType: "success",
@@ -324,6 +340,19 @@ export default {
         this.setYears();
     },
     watch: {
+        fileAvatar: function(value) {
+            let iconSuccess = document.getElementById('avatar-icon-error')
+            let iconError = document.getElementById('avatar-icon-success')
+            if(!value) {
+                iconSuccess.classList.remove('invisible');
+                iconError.classList.add('invisible');
+                this.avatarValid = false;
+            }else{
+                iconSuccess.classList.add('invisible');
+                iconError.classList.remove('invisible');    
+                this.avatarValid = true;
+            }
+        },
         name: function(value) {
             let iconSuccess = document.getElementById('name-icon-success')
             let iconError = document.getElementById('name-icon-error')
@@ -486,13 +515,10 @@ export default {
     },
     methods: {
         ...mapActions(["loginUser"]),
-        testFotoUpload: function() {
-
-        },
         validate: function(){
             if(this.nameValid && this.lastnameValid && this.fNameValid && this.sexValid
                 && this.dayBirthValid && this.monthBirthValid && this.yearBirthValid
-                && this.passwordValid && this.telNumberValid && this.roleValid && this.sexValid) {
+                && this.passwordValid && this.telNumberValid && this.roleValid && this.sexValid && this.avatarValid) {
                     return true
                 }else{ 
                     return false

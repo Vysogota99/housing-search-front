@@ -14,7 +14,6 @@ import NotFoundComponent from '../components/subComponents/NotFoundComponent.vue
 import TemplatesComponent from '../components/TemplatesComponent.vue'
 import AddeFlatComponent from '../components/AddFlatComponent.vue'
 
-
 Vue.use(VueRouter);
 const routes = [
     {
@@ -85,6 +84,7 @@ const routes = [
     {
         path: '/lot/create',
         component: AddeFlatComponent,
+
     },
     {
         path: '*',
