@@ -12,6 +12,7 @@ import MyAdsComponen from '../components/MyAdsComponent.vue'
 import CreateAdComponent from '../components/CreateAdComponent.vue'
 import NotFoundComponent from '../components/subComponents/NotFoundComponent.vue'
 import TemplatesComponent from '../components/TemplatesComponent.vue'
+import AddFlatComponent from '../components/AddFlatComponent.vue'
 
 
 Vue.use(VueRouter);
@@ -80,6 +81,10 @@ const routes = [
             requiresAuth: true,
             role: 1,
         }
+    },
+    {
+        path: '/addflat',
+        component: AddFlatComponent,
     },
     {
         path: '*',
