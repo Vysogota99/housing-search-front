@@ -41,7 +41,9 @@
         </v-card-text> 
         <v-card-actions>
         <button class="default-btn btn-min-width">Открыть объявление</button>
-        <button class="default-btn" @click="convertDate">Редактировать</button>
+        <router-link :to="{ name: 'create ad', params: { id: data.id, isConstruct: false }}">
+            <button class="default-btn">Редактировать</button>
+        </router-link>
     </v-card-actions>
     </div>
 </template>
@@ -76,8 +78,8 @@ export default {
     margin: 5px;
     padding: 20px 15px;
     box-shadow:0px 1px 7px 0px rgba(0,0,0,0.45);
--webkit-box-shadow:0px 1px 7px 0px rgba(0,0,0,0.45);
--moz-box-shadow:0px 1px 7px 0px rgba(0,0,0,0.45);
+    -webkit-box-shadow:0px 1px 7px 0px rgba(0,0,0,0.45);
+    -moz-box-shadow:0px 1px 7px 0px rgba(0,0,0,0.45);
 }
 .ad span{
     font-size: 18px;

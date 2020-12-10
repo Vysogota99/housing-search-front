@@ -18,6 +18,7 @@
                             <router-link to="/rooms">
                                 <li>комнаты</li>
                             </router-link>
+                            
                         </ul>
                 </div>
             </div>
@@ -25,7 +26,9 @@
             </div>
             <div class="right-content">
                 <ul class="hr">
-                    <li>ДОБАВИТЬ КВАРТИРУ</li>
+                    <router-link to="/lot/create">
+                        <li>ДОБАВИТЬ ОБЪЯВЛЕНИЕ</li>
+                    </router-link>
                 </ul>
                 <v-menu offset-y>
                     <template v-slot:activator="{ on, attrs }">
@@ -44,20 +47,44 @@
                     </template>
 
                     <v-list v-if="authStatus">
-                        <v-list-item
-                            v-for="(item, index) in itemsUser"
-                            :key="index"
-                        >
-                                <router-link v-bind:to="item.url" v-if="item.url != '/logout'">
-                                    <v-list-item-title>
-                                        {{ item.title }}
-                                    </v-list-item-title>
+                        <v-list-item>
+                                <router-link to="/account">
+                                    <v-list-item-content>
+                                        <v-list-item-title>
+                                            Профиль
+                                        </v-list-item-title>
+                                    </v-list-item-content>
                                 </router-link>
-
-                                <a v-else @click="logoutUser">
-                                    {{item.title}}
-                                </a>
                         </v-list-item>
+
+                        <v-list-item v-if="getRole == 1"> 
+                                <router-link to="/my-ads">
+                                    <v-list-item-content>
+                                        <v-list-item-title>
+                                            Мои объявления
+                                        </v-list-item-title>
+                                    </v-list-item-content>
+                                </router-link>
+                        </v-list-item>
+
+                         <v-list-item v-if="getRole == 1"> 
+                                <router-link to="/lot/template">
+                                    <v-list-item-content>
+                                        <v-list-item-title>
+                                            Мои шаблоны
+                                        </v-list-item-title>
+                                    </v-list-item-content>
+                                </router-link>
+                        </v-list-item>
+
+                        <v-list-item @click="logoutUser()">
+                              <v-list-item-content>
+                                <v-list-item-title>
+                                    Выход
+                                </v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+
                     </v-list>
                     <v-list v-else>
                         <v-list-item
@@ -77,41 +104,41 @@
 <script>
 
 import {mapGetters, mapActions} from "vuex"
-
+import config from '../config'
 export default {
     data: () => ({
-      itemsUser: [
-        { 
-            title: 'Профиль',
-            url: '/account',
-            role: '0',
-        },
-        { 
-            title: 'Мои объявления',
-            url: '/my-ads', 
-            role: '1',
-        },
-        { 
-            title: 'Выход',
-            url: '/logout',
-            role: '0',
-        },
-      ],
-      itemsGuest: [
-          {
-              title: "Регистрация",
-              url: "/signup",
-          },
-          {
-              title: "Вход",
-              url: "/login"
-          }
-      ]
+        apiUrl: config.apiURL,      
+        itemsUser: [
+            { 
+                title: 'Профиль',
+                url: '/account',
+            },
+            { 
+                title: 'Мои объявления',
+                url: '/my-ads', 
+                role: '1',
+            },
+            { 
+                title: 'Выход',
+                url: '/logout',
+            },
+        ],
+        itemsGuest: [
+            {
+                title: "Регистрация",
+                url: "/signup",
+            },
+            {
+                title: "Вход",
+                url: "/login"
+            }
+        ]
     }),
     computed: {
         ...mapGetters([
             "authStatus",
             "getRole",
+            "getAvatarURL",
         ]),
     },
     methods: {
@@ -217,5 +244,12 @@ ul.hr li {
     color: #000;
     display: inline; /* Отображать как строчный элемент */
     margin-right: 15px; /* Отступ слева */ 
+}
+.avatar-btn{
+    width: 60px;
+    height: 60px;
+    border-radius: 100%;
+    overflow: hidden;
+    border: 2px solid #512DE4;
 }
 </style>

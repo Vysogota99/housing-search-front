@@ -4,12 +4,13 @@
             <div class="ads-content">
                 <AdComponent v-for="ad in ads" :key="ad.id" :data="ad"/>
             </div>
-            <div class="pagination">
+            <div class="pagination" v-if="ads.length > 0 && nPages > 1">
                 <v-pagination
                     v-model="currPage"
                     color="#512DE4"
                     :length="nPages"
                     circle
+                    v-if="ads.length > 0"
                 ></v-pagination>
             </div>
         </div>
@@ -27,7 +28,7 @@
 import AdComponent from './subComponents/AdComponent';
 import config from '../config';
 import axios from 'axios';
-import {mapGetters} from 'vuex';
+import {mapGetters, mapActions} from 'vuex';
 
 export default {
     components: {
@@ -46,6 +47,9 @@ export default {
         ]),
     },
     methods: {
+        ...mapActions([
+            "logoutUser",
+        ]),
         getMyAds: function() {
             let self = this;
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.getAccessToken;
@@ -59,11 +63,13 @@ export default {
                 self.currPage = response.data.result.curr_page;
             })
             .catch(function(error){
-                console.log(error.request);
+                if(!error.response){
+                    self.logoutUser();
+                }
             })
         }
     },
-    created: function(){
+    beforeMount: function(){
         this.getMyAds();
     },
 }
@@ -72,15 +78,15 @@ export default {
 <style>
 .my-ads{
     margin-top: 100px;
-    width: 1600px;
+    max-width: 1600px;
     margin: 100px auto;
-    height: 1000px;
+    margin-bottom: 0;
     padding: 40px 0px;
 }
 .ads-content{
+    min-height: 600px;
     display: flex;
     flex-flow: row wrap;
-    margin-bottom: 50px;
 }
 .no-ads{
     margin-top: 270px;

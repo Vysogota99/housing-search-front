@@ -23,13 +23,19 @@ export default {
                 context.commit("updateAuthStatus", true);
                 context.commit("updateAccessToken", response.data.access_token);
                 context.commit("updateRefreshToken", response.data.refresh_token);
+                context.commit("updateRole", response.data.user.Role);
+                
 
                 context.commit("updateLoginMessageType", "success");
                 context.commit("updateLoginMessageVisible", true);
                 context.commit("updateLoginMessage", "Добро пожаловать " + response.data.user.PassName);   
-                
+                context.commit("updateAvatarURL", response.data.user.AvatartPath);
+
                 localStorage.setItem("access_token", response.data.access_token);
                 localStorage.setItem("refresh_token", response.data.refresh_token);
+                localStorage.setItem('role', response.data.user.Role);
+                localStorage.setItem('avatarUrl', response.data.user.AvatartPath);
+
 
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.access_token
             })
@@ -72,23 +78,41 @@ export default {
                 delete axios.defaults.headers.common["Authorization"];
                 localStorage.removeItem("access_token");
                 localStorage.removeItem("refresh_token");
+                localStorage.removeItem('role');
+                localStorage.removeItem('avatarUrl');
 
                 context.commit("updateAccessToken", "");
                 context.commit("updateRefreshToken", "");
                 context.commit("updateAuthStatus", false);
+                context.commit("updateRole", "");
+                context.commit("updateAvatarURL", "");
 
                 router.push("/login");
 
             })
-            .catch(function(error){
-                console.log(error.response);
+            .catch(function(){
+                delete axios.defaults.headers.common["Authorization"];
+                localStorage.removeItem("access_token");
+                localStorage.removeItem("refresh_token");
+                localStorage.removeItem('role');
+                localStorage.removeItem('avatarUrl');
+
+                context.commit("updateAccessToken", "");
+                context.commit("updateRefreshToken", "");
+                context.commit("updateAuthStatus", false);
+                context.commit("updateRole", "");
+                context.commit("updateAvatarURL", "");
+
+                router.push("/login");
             })
         }
     },
     mutations: {
         updateUser(state, user) {
             state.user = user;
-            state.role = user.Role;
+        },
+        updateRole(state, role) {
+            state.role = role;
         },
         updateAccessToken(state, token) {
             state.accessToken = token;
@@ -107,6 +131,9 @@ export default {
         },
         updateLoginMessageType(state, type) {
             state.LoginMessageType = type;
+        },
+        updateAvatarURL(state, url) {
+            state.avatarURL = url
         }
     },
     state: {
@@ -119,13 +146,17 @@ export default {
         isAuthorized: localStorage.getItem('access_token') ? true: false,
 
         user: {},
-        role: 0,
+        role: localStorage.getItem('role'),
+        avatarURL: localStorage.getItem('avatarUrl'),
 
         LoginMessageVisible: false,
         LoginMessage: "",
         LoginMessageType: "error",
     },
     getters: {
+        getAvatarURL(state){
+            return state.avatarURL;
+        },
         getAccessToken(state) {
             return state.accessToken;
         },
@@ -136,7 +167,8 @@ export default {
             return state.user;
         },
         getRole(state) {
-            return state.user.Role;
+            console.log(state.role);
+            return state.role;
         },
         getLoginMessageVisible(state) {
             return state.LoginMessageVisible;

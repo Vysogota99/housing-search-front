@@ -77,7 +77,7 @@
             </div>
             <div class="col-1"></div>
         </div>
-        <div class="row">
+        <div class="row" v-if="rooms.length > 0 && nPages > 1">
             <div class="col-1"></div>
             <div class="col-10">
                 <div class="pagination">
@@ -237,7 +237,7 @@ export default {
             'updateOrderBy',
             'updateAddress',
         ]),
-        getRooms: function(limit, offset) {
+        getRooms: async function(limit, offset) {
             let self = this;    
             let filters = this.filterRooms;
             let requestParams = {
@@ -259,6 +259,8 @@ export default {
                 self.rooms = response.data.result.data;
                 self.nPages = response.data.result.num_pages;
                 self.currPage = response.data.result.curr_page;
+
+                console.log(self.rooms);
             })
             .catch(function(error){
                 self.rooms = [];

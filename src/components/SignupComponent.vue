@@ -16,69 +16,119 @@
     </div>
     <br>
     <div class="row">
-        <div class="col-4"><span>Имя</span></div>
         <div class="col-8">
-            <input type="text" class="default-input" placeholder="введите имя" v-model="name">
-            <v-icon 
-                class="icon invisible"
-                id="name-icon-success"
-                color="green"
-            >
-                mdi-check-outline
-            </v-icon>
-            <span class="span-error invisible" id="name-icon-error">
-                <v-icon 
-                    class="icon"
-                    color="#F36316"
-                >
-                    mdi-close-outline
-                </v-icon>
-                Заполните поле
-            </span>
+            <div class="row">
+                    <div class="col-6 left"><span>Имя</span></div>
+                    <div class="col-6">
+                        <input type="text" class="default-input" placeholder="введите имя" v-model="name">
+                        <v-icon 
+                            class="icon invisible"
+                            id="name-icon-success"
+                            color="green"
+                        >
+                            mdi-check-outline
+                        </v-icon>
+                        <span class="span-error invisible" id="name-icon-error">
+                            <v-icon 
+                                class="icon"
+                                color="#F36316"
+                            >
+                                mdi-close-outline
+                            </v-icon>
+                            Заполните поле
+                        </span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 left"><span>Фамилия</span></div>
+                    <div class="col-6">
+                        <input type="text" class="default-input" placeholder="введите фамилию" v-model="lastname">
+                        <v-icon 
+                            class="icon invisible"
+                            id="lastname-icon-success"
+                            color="green"
+                        >
+                            mdi-check-outline
+                        </v-icon>
+                        <span class="span-error invisible" id="lastname-icon-error">
+                            <v-icon 
+                                class="icon"
+                                color="#F36316"
+                            >
+                                mdi-close-outline
+                            </v-icon>
+                            Заполните поле
+                        </span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 left"><span>Отчество</span></div>
+                    <div class="col-6">
+                        <input type="text" class="default-input" placeholder="введите отчество" v-model="fName">
+                        <v-icon 
+                            class="icon invisible"
+                            id="fName-icon-success"
+                            color="green"
+                        >
+                            mdi-check-outline
+                        </v-icon>
+                        <span class="span-error invisible" id="fName-icon-error">
+                            <v-icon 
+                                class="icon"
+                                color="#F36316"
+                            >
+                                mdi-close-outline
+                            </v-icon>
+                            Заполните поле
+                        </span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 left"><span>Пол</span></div>
+                    <div class="col-6">            
+                        <div class="form_radio_group">
+                            <div class="form_radio_group-item">
+                                <input id="male" type="radio" name="sex" checked value="male" v-model="sex">
+                                <label for="male">Мужской</label>
+                            </div>
+                            <div class="form_radio_group-item">
+                                <input id="female" type="radio" name="sex" value="female" v-model="sex">
+                                <label for="female">Женский</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-4"><span>Фамилия</span></div>
-        <div class="col-8">
-            <input type="text" class="default-input" placeholder="введите фамилию" v-model="lastname">
-            <v-icon 
-                class="icon invisible"
-                id="lastname-icon-success"
-                color="green"
-            >
-                mdi-check-outline
-            </v-icon>
-            <span class="span-error invisible" id="lastname-icon-error">
-                <v-icon 
-                    class="icon"
-                    color="#F36316"
-                >
-                    mdi-close-outline
-                </v-icon>
-                Заполните поле
-            </span>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-4"><span>Отчество</span></div>
-        <div class="col-8">
-            <input type="text" class="default-input" placeholder="введите отчество" v-model="fName">
-            <v-icon 
-                class="icon invisible"
-                id="fName-icon-success"
-                color="green"
-            >
-                mdi-check-outline
-            </v-icon>
-            <span class="span-error invisible" id="fName-icon-error">
-                <v-icon 
-                    class="icon"
-                    color="#F36316"
-                >
-                    mdi-close-outline
-                </v-icon>
-                Заполните поле
-            </span>
+        <div class="col-4 right">
+            <div class="signup-image">
+                <label for="input__file">
+                    <div class="signup-image-input"> 
+                        <v-img
+                            height="200"
+                            width="200"
+                            :src="avatarImagePath"
+                        ></v-img>
+                    </div>
+                    <input type="file" class="input input__file" id="input__file" ref="fileAvatar" @change="showFile"/>
+                    <span class="signup-image-span">Выберите фото</span>
+                    <span class="span-error invisible" id="avatar-icon-error">
+                            <v-icon 
+                                class="icon invisible"
+                                color="#F36316"
+                            >
+                                mdi-close-outline
+                            </v-icon>
+                            Фото не выбрано
+                    </span>
+                   <v-icon 
+                        class="icon invisible"
+                        id="avatar-icon-success"
+                        color="green"
+                    >
+                        mdi-check-outline
+                    </v-icon>
+                </label>
+            </div>
         </div>
     </div>
     <div class="row">
@@ -125,21 +175,6 @@
                 </v-icon>
                 заполните дату
             </span>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-4"><span>Пол</span></div>
-        <div class="col-8">            
-            <div class="form_radio_group">
-                <div class="form_radio_group-item">
-                    <input id="male" type="radio" name="sex" checked value="male" v-model="sex">
-                    <label for="male">Мужской</label>
-                </div>
-                <div class="form_radio_group-item">
-                    <input id="female" type="radio" name="sex" value="female" v-model="sex">
-                    <label for="female">Женский</label>
-                </div>
-            </div>
         </div>
     </div>
     <br>
@@ -290,6 +325,7 @@ export default {
         passwordRepValid: false,
         telNumberValid: false,
         roleValid: false,
+        avatarValid: false,
 
         alertText: "Отлично, регистрация прошла успешно!",
         alertType: "success",
@@ -297,12 +333,26 @@ export default {
 
         apiUrl: "http://127.0.0.1/api",
 
-        self: this,
+        avatarImagePath: config.apiURL + "/images/no_avatar.jpg",
+        fileAvatar: '',
     }),
     created: function() {
         this.setYears();
     },
     watch: {
+        fileAvatar: function(value) {
+            let iconSuccess = document.getElementById('avatar-icon-error')
+            let iconError = document.getElementById('avatar-icon-success')
+            if(!value) {
+                iconSuccess.classList.remove('invisible');
+                iconError.classList.add('invisible');
+                this.avatarValid = false;
+            }else{
+                iconSuccess.classList.add('invisible');
+                iconError.classList.remove('invisible');    
+                this.avatarValid = true;
+            }
+        },
         name: function(value) {
             let iconSuccess = document.getElementById('name-icon-success')
             let iconError = document.getElementById('name-icon-error')
@@ -468,11 +518,16 @@ export default {
         validate: function(){
             if(this.nameValid && this.lastnameValid && this.fNameValid && this.sexValid
                 && this.dayBirthValid && this.monthBirthValid && this.yearBirthValid
-                && this.passwordValid && this.telNumberValid && this.roleValid && this.sexValid) {
+                && this.passwordValid && this.telNumberValid && this.roleValid && this.sexValid && this.avatarValid) {
                     return true
                 }else{ 
                     return false
                 }
+        },
+        showFile(e){
+            let image = e.target.files[0];
+            this.fileAvatar = image;
+            this.avatarImagePath = URL.createObjectURL(image);
         },
         setYears: function(){
             let nowYear = 2020;
@@ -493,23 +548,33 @@ export default {
             this.alertText = "Все поля заполнены верно, начинаем регистрацию";
             this.alertType = "success";
             this.alerVisible = true;
-            
-            let User = {
-                name: this.name,
-                lastname: this.lastname,
-                sex: this.sex,
-                dateOfbirth: this.dayBirth + "." + Number(this.monthItems.indexOf(this.monthBirth) + 1) + "." + this.yearBirth,
-                password: this.password,
-                telephoneNumber: this.telNumber.replace(/[-]|[(]|[)]/gi, ''),
-                Role: this.role,
-            }
+
+            let formData = new FormData();
+            formData.append('avatar', this.fileAvatar)
+            formData.append('name', this.name)
+            formData.append('lastname', this.lastname)
+            formData.append('sex', this.sex)
+            formData.append('dateOfbirth', this.dayBirth + "." + Number(this.monthItems.indexOf(this.monthBirth) + 1) + "." + this.yearBirth)
+            formData.append('password', this.password)
+            formData.append('telephoneNumber', this.telNumber.replace(/[-]|[(]|[)]/gi, ''))
+            formData.append('role', this.role)
+
+            // let User = {
+            //     name: this.name,
+            //     lastname: this.lastname,
+            //     sex: this.sex,
+            //     dateOfbirth: this.dayBirth + "." + Number(this.monthItems.indexOf(this.monthBirth) + 1) + "." + this.yearBirth,
+            //     password: this.password,
+            //     telephoneNumber: this.telNumber.replace(/[-]|[(]|[)]/gi, ''),
+            //     Role: this.role,
+            // }
 
             const self = this;
             const headers ={
                 'Content-Type': 'application/x-www-form-urlencoded',
             }         
             axios.post(config.apiURL + '/signup', 
-            User,
+            formData,
             {
                 headers: headers,
             })
@@ -590,6 +655,9 @@ span{
 .long{
     width: 450px;
 }
+.left{
+    text-align: right;
+}
 #datebirth{
     display: flex;
     flex-flow: row wrap;
@@ -655,9 +723,28 @@ span{
 }
 .span-error{
     color: #F36316;
+    font-size: 16px;
 }
 .invisible{
     display: none;
 }
-
+.signup-image {
+    text-align: left;
+}
+.signup-image-input{
+    width: 200px;
+    height: 200px;
+    border-radius: 100%;
+    border: 2px solid #512DE4;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+.signup-image-span{
+    padding-left: 17px;
+}
+.input__file {
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+}
 </style>
