@@ -9,6 +9,7 @@
             v-for="point in points"
             v-bind:marker-id="point.id" 
             :key="point.id"
+            :balloon-template="balloonTemplate"
             :coords="[point.long, point.lat]"
             cluster-name="1"
         />
@@ -32,6 +33,7 @@ export default {
                     'visible': false,
                 },
             },
+            placemarkBodies: [],
             settings: {
                 apiKey: 'd08acba1-212c-4135-9542-5a0b02a69be5',
                 lang: 'ru_RU',
@@ -48,6 +50,18 @@ export default {
         }
     },
     methods: {
+        onClick(e) {
+            this.coords = e.get('coords');
+        }
+    },
+    computed: {
+        balloonTemplate() {
+        return `
+            <h2 class=ballon_header>Какашка</h2>
+            <div class=ballon_body>Для машки</div>
+            <div class=ballon_footer>Букашки</div>
+        `
+        }
     },
     props: {
         zoom: {
@@ -80,5 +94,8 @@ export default {
 }
 .ymap-container {
   height: 100%;
+}
+.red {
+  color: red;
 }
 </style>
