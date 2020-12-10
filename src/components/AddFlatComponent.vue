@@ -1018,7 +1018,7 @@
                 class="white--text subBtn"
                 style="margin-top:20px; margin-bottom:40px;"
                 color="#7130C4"
-                @click="dialog = true; SubmitFlatInfo();"
+                @click="dialog = true; SubmitFlatInfo(); RedirectTo();"
                 >
                 Завершить редактирование
                 </v-btn>
@@ -1619,7 +1619,7 @@ export default {
 
         },
         RedirectTo(){
-            setTimeout(()=>(location.replace("/")),7000);
+            setTimeout(()=>(location.replace("http://185.251.91.134/lot/template")),5000);
         },
         async SearchAddress(){
             this.map.geoObjects.removeAll();
@@ -1734,7 +1734,7 @@ export default {
                     num_of_chairs: this.Room_One.ChairCount,
                     tv: this.Room_One.tv,
                     furniture: true,
-                    area: this.Room_One.area
+                    area: parseInt(this.Room_One.area)
                 };
                 let room_2 = {
                     living_place: [
@@ -1749,7 +1749,7 @@ export default {
                     num_of_chairs: this.Room_Two.ChairCount,
                     tv: this.Room_Two.tv,
                     furniture: true,
-                    area: this.Room_Two.area
+                    area: parseInt(this.Room_Two.area)
                 };
                 flat.rooms.push(room_1);
                 flat.rooms.push(room_2);
@@ -1768,7 +1768,7 @@ export default {
                     num_of_chairs: this.Room_One.ChairCount,
                     tv: this.Room_One.tv,
                     furniture: true,
-                    area: this.Room_One.area
+                    area: parseInt(this.Room_One.area)
                 };
                 let room_2 = {
                     living_place: [
@@ -1783,7 +1783,7 @@ export default {
                     num_of_chairs: this.Room_Two.ChairCount,
                     tv: this.Room_Two.tv,
                     furniture: true,
-                    area: this.Room_Two.area
+                    area: parseInt(this.Room_Two.area)
                 };
                 let room_3 = {
                     living_place: [
@@ -1798,7 +1798,7 @@ export default {
                     num_of_chairs: this.Room_Three.ChairCount,
                     tv: this.Room_Three.tv,
                     furniture: true,
-                    area: this.Room_Three.area
+                    area: parseInt(this.Room_Three.area)
                 };
                 flat.rooms.push(room_1);
                 flat.rooms.push(room_2);
