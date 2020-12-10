@@ -24,7 +24,7 @@
       </div>
       <div>
         <label>        </label><br>
-        <button class="btn"> Найти </button>  
+        <button class="btn-find"> Найти </button>  
       </div>
       <div>
         <label>        </label><br>
@@ -142,7 +142,7 @@ export default {
     margin-right: 8px;
     }
 
-  .btn {
+  .btn-find {
     background: linear-gradient(207.73deg, #512DE4 58.15%, #7130C4 89.84%);
     align-items: center;
     text-align: center;
