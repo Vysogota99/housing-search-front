@@ -26,7 +26,7 @@
             </div>
             <div class="right-content">
                 <ul class="hr">
-                    <router-link to="/addflat">
+                    <router-link to="/lot/create">
                         <li>ДОБАВИТЬ ОБЪЯВЛЕНИЕ</li>
                     </router-link>
                 </ul>
