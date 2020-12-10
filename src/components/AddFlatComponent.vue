@@ -1619,7 +1619,7 @@ export default {
 
         },
         RedirectTo(){
-            setTimeout(()=>(location.replace("http://185.251.91.134/lot/template")),5000);
+            setTimeout(()=>(location.replace("http://185.251.91.134/lot/template")),2000);
         },
         async SearchAddress(){
             this.map.geoObjects.removeAll();
