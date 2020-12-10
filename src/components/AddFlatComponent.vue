@@ -69,11 +69,11 @@
 
                     <div class="about_object_pos renovation">
                         <h10>Ремонт</h10>
-                        <div class="btn-group-sm renovation_btn" role="group" aria-label="Basic example">
-                            <button @click="repair_1();" type="button" class="btn btn-default left_btn">Косметический</button>
-                            <button  @click="repair_2();" type="button" class="btn btn-default middle_btn">Евро</button>
-                            <button  @click="repair_3();" type="button" class="btn btn-default middle_btn">Дизайнерский</button>
-                            <button  @click="repair_4();" type="button" class="btn btn-default right_btn">Без ремонта</button>
+                        <div class="btn-group renovation_btn" role="group" aria-label="Basic example">
+                            <button @click="repair_1(); Activate1()" v-bind:class="{active:isActive1}" type="button"  class="left_btn1 ">Косметический</button>
+                            <button  @click="repair_2(); Activate2()" v-bind:class="{active:isActive2}" type="button" class="middle_btn1">Евро</button>
+                            <button  @click="repair_3(); Activate3()" v-bind:class="{active:isActive3}" type="button" class="middle_btn1">Дизайнерский</button>
+                            <button  @click="repair_4(); Activate4()" v-bind:class="{active:isActive4}" type="button" class="right_btn1">Без ремонта</button>
                         </div>
                         
                         
@@ -1010,18 +1010,56 @@
                 </div>
                 <!------------------------------------------------------- Конец комнаты 3 ------------------------------------------>
             </div>
-            <div class="submitButtonBlock">
-                <button class="submitButton" @click="SubmitFlatInfo()">Завершить редактирование</button>
+
+            <div class="text-center">
+                <v-btn
+                :disabled="dialog"
+                :loading="dialog"
+                class="white--text subBtn"
+                style="margin-top:20px; margin-bottom:40px;"
+                color="#7130C4"
+                @click="dialog = true; SubmitFlatInfo();"
+                >
+                Завершить редактирование
+                </v-btn>
+                <v-dialog
+                content-class
+                v-model="dialog"
+                hide-overlay
+                persistent
+                width="800"
+                color="#7130C4"
+                
+                >
+                    <v-card
+                        color="#7130C4"
+                        dark
+                       height="50"
+                    >
+                        <v-card-text>
+                        Отлично! Перенаправляем на главную страницу......
+                        <v-progress-linear
+                            indeterminate
+                            color="white"
+                            class="mb-0"
+                        ></v-progress-linear>
+                        </v-card-text>
+                    </v-card>
+                </v-dialog>
             </div>
-
-
-
         </div>
         
     </div>
 </template>
 
-<style scoped>
+<style>
+    .v-dialog__content {
+    align-items: flex-start;
+    margin-top: 100px;
+    color:white;
+    font-size: 20px;
+    justify-content: center;
+    }
     .submitButtonBlock {
         width: 50%;
         margin: 0 auto;
@@ -1210,6 +1248,12 @@
     .btn {
         color: black;
     }
+    .subBtn {
+        background: linear-gradient(207.73deg, #512DE4 58.15%, #7130C4 89.84%);
+        font-weight: normal;
+        border-radius: 99px;
+    }
+
     .submitButton:focus {
         outline: none;
         box-shadow: none;
@@ -1220,21 +1264,55 @@
         transition: 0.3s ease;
         
     }
-
-    .btn:focus {
-        outline: none;
-        box-shadow: none;
+    .left_btn1{
+        transition: 0.3 ease;
+        font-weight: normal;
+        font-size: x-small;
+        border: 1px solid #7130C4;
+        border-radius: 20px 0px 0px 20px;
+        color: black;
+        background-color: white;
+        height:30px;width:100px;
+        margin-right: 0px;
     }
-    .btn:hover {
+    .right_btn1{
+        transition: 0.3 ease;
+        font-weight: normal;
+        font-size: x-small;
+        border: 1px solid #7130C4;
+        border-radius: 0px 20px 20px 0px;
+        color: black;
+        background-color: white;
+        height:30px;width:100px;
+        margin-right: 0px;
+    }
+
+    .middle_btn1{
+        transition: 0.3 ease;
+        font-weight: normal;
+        font-size: small;
+        border: 1px solid #7130C4;
+        color: black;
+        background-color: white;
+        height:30px;width:100px;
+        margin-right: 0px;
+    }
+
+    .left_btn1:hover, .middle_btn1:hover, .right_btn1:hover {
         color: white;
-        background-color: #7130C4;
+        background: linear-gradient(207.73deg, #512DE4 58.15%, #7130C4 89.84%);
         transition: 0.3s ease;
         
     }
-    .btn:focus {
+    .active{
         color: white;
         background-color: #7130C4;
-        transition: 0.3s ease;
+    }
+    button:active, button:focus {
+        outline: none;
+    }
+    button::-moz-focus-inner {
+        border: 0;
     }
     ::-webkit-input-placeholder {
         text-align:center;
@@ -1269,9 +1347,10 @@
     }
 </style>
 
-<script>
+<script >
 import PictureInput from 'vue-picture-input';
 import axios from 'axios';
+import {mapGetters} from 'vuex'
 export default {
     mounted() {
         this.ymaps.ready(this.createMap());
@@ -1279,7 +1358,16 @@ export default {
     components: {
         PictureInput
     },
+    computed: {
+      ...mapGetters([
+          'getAccessToken',
+      ])
+    },
     data:() => ({
+        isActive1: false,
+        isActive2: false,
+        isActive3: false,
+        isActive4: false,
         ymaps: window.ymaps,                              
         clusterer: null,
         map: null, 
@@ -1290,8 +1378,8 @@ export default {
         Address: '',
         X_cord:'',
         Y_cord:'',
-        ttmetro_food:'',
-        ttmetro_transport: '',
+        ttmetro_food:15,
+        ttmetro_transport: 15,
         metro: '',
         floor: '',
         floor_total: '',
@@ -1303,7 +1391,7 @@ export default {
         passenger_elevator: false,
         serve_elevator: false,
         kitchen: false,
-        bathroom: 1,
+        bathroom: false,
         refrigerator: false,
         dishwasher: false,
         stove_1: false,
@@ -1374,6 +1462,30 @@ export default {
     }),
     
     methods: {
+        Activate1() {
+            this.isActive1 = true;
+            this.isActive2 = false;
+            this.isActive3 = false;
+            this.isActive4 = false;
+        },
+        Activate2() {
+            this.isActive1 = false;
+            this.isActive2 = true;
+            this.isActive3 = false;
+            this.isActive4 = false;
+        },
+        Activate3() {
+            this.isActive1 = false;
+            this.isActive2 = false;
+            this.isActive3 = true;
+            this.isActive4 = false;
+        },
+        Activate4() {
+            this.isActive1 = false;
+            this.isActive2 = false;
+            this.isActive3 = false;
+            this.isActive4 = true;
+        },
         repair_1() {
             this.repair = 1;
             console.log(this.repair);
@@ -1506,8 +1618,11 @@ export default {
             }, 1000)
 
         },
+        RedirectTo(){
+            setTimeout(()=>(location.replace("/")),7000);
+        },
         async SearchAddress(){
-            this.map.geoObjects.remove();
+            this.map.geoObjects.removeAll();
             // console.log(response.data.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos
             
             await axios
@@ -1527,7 +1642,6 @@ export default {
                     console.log(error);
                     throw error;
                 });
-    
            
         },
         SetStove() {
@@ -1548,15 +1662,23 @@ export default {
                 this.heating = 3;
             }
         },
+        SetBathroom() {
+            if(this.bathroom == true) {
+                this.bathroom = 1;
+            }else if (this.bathroom == false) {
+                this.bathroom = 0;
+            }
+        },
         SubmitFlatInfo () {
             this.SetStove();
             this.SetHeating();
+            this.SetBathroom();
             let flat = {
                     rooms: [],
                     address: this.Address,
                     coordinates: {
-                    lat: parseInt(this.X_cord),
-                    lon: parseInt(this.Y_cord)
+                    lat: parseFloat(this.X_cord),
+                    lon: parseFloat(this.Y_cord)
                     },
                     ttmetro_food: parseInt(this.ttmetro_food),
                     ttmetro_transport: parseInt(this.ttmetro_transport),
@@ -1684,6 +1806,7 @@ export default {
                 console.log(flat);
             }
             let flt_jsn = JSON.stringify(flat);
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.getAccessToken;
             axios.post('http://185.251.91.134/api/lot', 
                 flt_jsn,
             )
@@ -1691,6 +1814,7 @@ export default {
             .then((response) => {
                 console.log(response);
                 console.log('Данные отправлены успешно!')
+
             })
 
             .catch((error) => {

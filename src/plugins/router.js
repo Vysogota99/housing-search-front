@@ -12,7 +12,7 @@ import MyAdsComponen from '../components/MyAdsComponent.vue'
 import CreateAdComponent from '../components/CreateAdComponent.vue'
 import NotFoundComponent from '../components/subComponents/NotFoundComponent.vue'
 import TemplatesComponent from '../components/TemplatesComponent.vue'
-import AddeFlatComponent from '../components/AddFlatComponent.vue'
+import AddFlatComponent from '../components/AddFlatComponent.vue'
 
 Vue.use(VueRouter);
 const routes = [
@@ -83,7 +83,11 @@ const routes = [
     },
     {
         path: '/lot/create',
-        component: AddeFlatComponent,
+        component: AddFlatComponent,
+        meta: {
+            requiresAuth: true,
+            role: 1,
+        }
 
     },
     {
